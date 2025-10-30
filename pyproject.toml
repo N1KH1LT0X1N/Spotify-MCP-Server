@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_backend"
+
+[project]
+name = "spotify-mcp"
+version = "0.1.0"
+description = "A comprehensive MCP server for Spotify control and automation"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+    "spotipy>=2.23.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+]
+
+[project.scripts]
+spotify-mcp = "spotify_mcp.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
