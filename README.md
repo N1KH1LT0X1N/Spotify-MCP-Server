@@ -1,6 +1,29 @@
 # Spotify MCP Server
 
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![MCP](https://img.shields.io/badge/MCP-1.0-green.svg)](https://modelcontextprotocol.io)
+[![Spotify API](https://img.shields.io/badge/Spotify-Web%20API-1DB954.svg)](https://developer.spotify.com/documentation/web-api)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 A comprehensive Model Context Protocol (MCP) server for Spotify, enabling AI assistants to control playback, manage playlists, search music, and more.
+
+> **Note**: This is a production-ready MCP server with comprehensive documentation. If you encounter any issues during setup, check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - it covers all common problems and solutions.
+
+## ⚡ Quick Start
+
+Get running in 5 minutes: [QUICKSTART.md](QUICKSTART.md)
+
+## 🎯 What Can You Do?
+
+Ask your AI assistant:
+- "Play my Discover Weekly playlist"
+- "Search for jazz music and create a playlist"
+- "What are my top artists this month?"
+- "Add this song to my queue"
+- "Show me recommendations based on chill vibes"
+- "Pause playback and skip to the next track"
+- "Create a playlist called 'Workout Mix' and add energetic songs"
 
 ## Features
 
