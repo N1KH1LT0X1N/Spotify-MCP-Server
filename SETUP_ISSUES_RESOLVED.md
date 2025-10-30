@@ -226,12 +226,12 @@ Token expires at: 1761853022
 {
   "mcpServers": {
     "spotify": {
-      "command": "C:\\Users\\admin\\anaconda3\\python.exe",
+      "command": "C:\\Users\\YourName\\anaconda3\\python.exe",
       "args": ["-m", "spotify_mcp.server"],
       "env": {
-        "PYTHONPATH": "c:\\Users\\admin\\OneDrive\\Documents\\GitHub\\spotify_mcp\\src",
-        "SPOTIFY_CLIENT_ID": "abda41fb4c8c46d38db28bf60769ccb5",
-        "SPOTIFY_CLIENT_SECRET": "81f56e84666c40bb8e3f22a4710fcde5",
+        "PYTHONPATH": "c:\\Users\\YourName\\Documents\\GitHub\\spotify_mcp\\src",
+        "SPOTIFY_CLIENT_ID": "your_client_id_here",
+        "SPOTIFY_CLIENT_SECRET": "your_client_secret_here",
         "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
       }
     }
