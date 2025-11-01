@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-A comprehensive Model Context Protocol (MCP) server for Spotify, enabling AI assistants to control playback, manage playlists, search music, and more.
+A comprehensive Model Context Protocol (MCP) server for Spotify, enabling AI assistants to control playback, manage playlists, search music, and more
 
 > **Note**: This is a production-ready MCP server with comprehensive documentation. If you encounter any issues during setup, check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - it covers all common problems and solutions.
 
