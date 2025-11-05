@@ -90,7 +90,8 @@ Skip standalone testing and authenticate through Claude Desktop (see below).
         "SPOTIFY_CLIENT_ID": "your_client_id_here",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret_here",
         "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
-      }
+      },
+      "icon": "/full/path/to/spotify-mcp/icon.svg"
     }
   }
 }
@@ -108,7 +109,8 @@ Skip standalone testing and authenticate through Claude Desktop (see below).
         "SPOTIFY_CLIENT_ID": "abcd1234...",
         "SPOTIFY_CLIENT_SECRET": "efgh5678...",
         "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
-      }
+      },
+      "icon": "c:\\Users\\YourName\\Documents\\GitHub\\spotify_mcp\\icon.svg"
     }
   }
 }
@@ -118,6 +120,7 @@ Skip standalone testing and authenticate through Claude Desktop (see below).
 - Use **full paths** (not relative paths)
 - On Windows, use `\\` for path separators
 - Set `PYTHONPATH` to the `src` directory
+- Add `icon` property for the Spotify logo
 - Use `127.0.0.1`, not `localhost`
 
 Restart Claude Desktop and you'll see Spotify tools available! 🎉
@@ -148,6 +151,11 @@ Run `python test_auth.py` to verify authentication works and tokens are saved to
 1. Use `http://127.0.0.1:8888/callback` (not `localhost`)
 2. Make sure it's added in your Spotify Developer Dashboard
 3. Make sure it matches exactly in `.env` and Claude config
+
+### Claude Desktop Icon Not Showing
+1. Add the `icon` property to your configuration
+2. Use the full absolute path to `icon.svg`
+3. Restart Claude Desktop completely
 
 For more troubleshooting, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 

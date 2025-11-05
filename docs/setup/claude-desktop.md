@@ -37,7 +37,8 @@ This approach sets PYTHONPATH and credentials directly in the config:
         "SPOTIFY_CLIENT_ID": "your_client_id_here",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret_here",
         "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
-      }
+      },
+      "icon": "c:\\Users\\YourName\\Documents\\GitHub\\spotify_mcp\\icon.svg"
     }
   }
 }
@@ -55,7 +56,8 @@ This approach sets PYTHONPATH and credentials directly in the config:
         "SPOTIFY_CLIENT_ID": "your_client_id_here",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret_here",
         "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
-      }
+      },
+      "icon": "/Users/yourname/projects/spotify-mcp/icon.svg"
     }
   }
 }
@@ -65,6 +67,7 @@ This approach sets PYTHONPATH and credentials directly in the config:
 - Use **full paths** (not relative paths like `~/` or `./`)
 - On Windows, use `\\` for path separators
 - `PYTHONPATH` must point to the `src` directory
+- Add `icon` property for the Spotify logo to appear
 - **Use `127.0.0.1`, not `localhost`** (Spotify requirement)
 
 ### Option 2: Using .env File (Alternative)
@@ -80,7 +83,8 @@ If you've already set up a `.env` file in the project and want to use those cred
       "cwd": "/absolute/path/to/spotify-mcp",
       "env": {
         "PYTHONPATH": "/absolute/path/to/spotify-mcp/src"
-      }
+      },
+      "icon": "/absolute/path/to/spotify-mcp/icon.svg"
     }
   }
 }
@@ -98,7 +102,8 @@ If you want to use a specific Python virtual environment:
     "spotify": {
       "command": "/absolute/path/to/spotify-mcp/venv/bin/python",
       "args": ["-m", "spotify_mcp.server"],
-      "cwd": "/absolute/path/to/spotify-mcp"
+      "cwd": "/absolute/path/to/spotify-mcp",
+      "icon": "/absolute/path/to/spotify-mcp/icon.svg"
     }
   }
 }
@@ -118,7 +123,8 @@ You can run multiple MCP servers alongside Spotify:
       "env": {
         "SPOTIFY_CLIENT_ID": "your_client_id_here",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret_here"
-      }
+      },
+      "icon": "/path/to/spotify-mcp/icon.svg"
     },
     "filesystem": {
       "command": "npx",
@@ -157,6 +163,18 @@ You can run multiple MCP servers alongside Spotify:
 **Problem:** Authentication prompts interfering with MCP JSON-RPC protocol.
 
 **Solution:** Make sure you're using the latest version of the code where authentication outputs to stderr instead of stdout. Update your repository and restart Claude Desktop.
+
+#### "Could not load app settings" / UTF-8 BOM Error
+
+**Problem:** Claude Desktop shows JSON parse error with "Unexpected token".
+
+**Solution:** The config file has a UTF-8 BOM. Remove it with:
+```powershell
+$content = Get-Content "$env:APPDATA\Claude\claude_desktop_config.json" -Raw
+[System.IO.File]::WriteAllText("$env:APPDATA\Claude\claude_desktop_config.json", $content, (New-Object System.Text.UTF8Encoding $false))
+```
+
+See [troubleshooting.md](troubleshooting.md) for more details.
 
 #### "ERR_CONNECTION_REFUSED" during authentication
 

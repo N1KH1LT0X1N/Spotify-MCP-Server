@@ -184,6 +184,46 @@ Use `http://127.0.0.1:8888/callback` everywhere:
 
 ---
 
+### Issue 6: "Could not load app settings" / UTF-8 BOM in Claude Desktop Config
+
+**Symptom:**
+Claude Desktop shows an error on startup:
+```
+Could not load app settings
+There was an error reading or parsing claude_desktop_config.json: Unexpected token "," "/" "m"... is not valid JSON
+```
+
+**Cause:**
+The configuration file `claude_desktop_config.json` has a UTF-8 BOM (Byte Order Mark) - three invisible bytes at the start of the file that Claude Desktop's JSON parser cannot handle. This commonly happens when editing the file with PowerShell's `Set-Content` command or certain text editors.
+
+**Solution:**
+Remove the BOM from the file:
+
+**Windows (PowerShell):**
+```powershell
+$content = Get-Content "$env:APPDATA\Claude\claude_desktop_config.json" -Raw
+[System.IO.File]::WriteAllText("$env:APPDATA\Claude\claude_desktop_config.json", $content, (New-Object System.Text.UTF8Encoding $false))
+```
+
+**macOS/Linux:**
+```bash
+# Check if BOM exists
+file ~/Library/Application\ Support/Claude/claude_desktop_config.json
+
+# Remove BOM if present
+sed -i '1s/^\xEF\xBB\xBF//' ~/Library/Application\ Support/Claude/claude_desktop_config.json
+```
+
+**Prevention:**
+- Edit the config file with **VS Code**, **Notepad++**, or similar editors
+- **Avoid PowerShell's `Set-Content`** - it adds BOM by default
+- If using PowerShell, use `[System.IO.File]::WriteAllText()` with UTF-8 encoding (no BOM)
+
+**Verification:**
+After removing the BOM, restart Claude Desktop. It should open without errors.
+
+---
+
 ## 🟡 Common Issues
 
 ### Authentication Required Every Time

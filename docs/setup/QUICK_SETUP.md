@@ -14,13 +14,18 @@
         "SPOTIFY_CLIENT_ID": "your_spotify_client_id_here",
         "SPOTIFY_CLIENT_SECRET": "your_spotify_client_secret_here",
         "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
-      }
+      },
+      "icon": "C:\\path\\to\\spotify_mcp\\icon.svg"
     }
   }
 }
 ```
 
-**⚠️ Important:** Replace the placeholders with your actual credentials from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+**⚠️ Important:** 
+- Replace `C:\\path\\to\\your\\venv\\Scripts\\python.exe` with your Python path
+- Replace `your_spotify_client_id_here` and `your_spotify_client_secret_here` with your actual credentials from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+- Replace `C:\\path\\to\\spotify_mcp\\icon.svg` with the full path to your `icon.svg` file
+- **Must use `127.0.0.1`, not `localhost`** for the redirect URI
 
 ### 2. Add to Claude Desktop:
 
@@ -37,10 +42,12 @@ The icon should appear in the bottom-left corner with a green toggle switch. Jus
 ## What Makes It Pretty:
 
 ✅ **Clean name:** Just "spotify" (not "spotify-mcp-server-123")  
-✅ **Spotify green icon:** #1DB954 brand color  
-✅ **Official Spotify logo:** Recognizable circular icon  
+✅ **Spotify green icon:** #1DB954 brand color with the icon property  
+✅ **Official Spotify logo:** Recognizable circular icon from `icon.svg`  
 ✅ **Proper metadata:** Description and version info  
-✅ **Works immediately:** Your credentials are already configured!
+✅ **Works immediately:** Your credentials are configured!
+
+**Note:** The `icon` property must point to the full absolute path of `icon.svg` for Claude Desktop to display it.
 
 ## Try These Commands:
 

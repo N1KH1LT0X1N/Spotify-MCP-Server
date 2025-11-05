@@ -67,7 +67,7 @@ Ask your AI assistant:
 4. Fill in the details:
    - **App name**: Whatever you like (e.g., "My MCP Server")
    - **App description**: "MCP server for Spotify control"
-   - **Redirect URI**: `http://localhost:8888/callback`
+   - **Redirect URI**: `http://127.0.0.1:8888/callback` ⚠️ **Must use 127.0.0.1, not localhost**
    - **APIs used**: Select "Web API"
 5. Agree to terms and click "Save"
 6. Click "Settings" to view your **Client ID** and **Client Secret**
@@ -89,7 +89,7 @@ Edit `.env` and add your credentials:
 ```
 SPOTIFY_CLIENT_ID=your_client_id_here
 SPOTIFY_CLIENT_SECRET=your_client_secret_here
-SPOTIFY_REDIRECT_URI=http://localhost:8888/callback
+SPOTIFY_REDIRECT_URI=http://127.0.0.1:8888/callback
 ```
 
 ### 4. Authenticate with Spotify
@@ -115,14 +115,15 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
       "env": {
         "SPOTIFY_CLIENT_ID": "your_client_id",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret",
-        "SPOTIFY_REDIRECT_URI": "http://localhost:8888/callback"
-      }
+        "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
+      },
+      "icon": "C:\\full\\path\\to\\spotify_mcp\\icon.svg"
     }
   }
 }
 ```
 
-The Spotify icon will appear in Claude Desktop with the official green branding! 🎵
+**Note:** Add the `icon` property with the full path to `icon.svg` to display the beautiful Spotify icon in Claude Desktop! 🎵
 
 ### Available Tools
 
@@ -171,18 +172,20 @@ For detailed troubleshooting, see [docs/setup/troubleshooting.md](docs/setup/tro
 - For Claude Desktop, add `"PYTHONPATH": "path/to/src"` in the env section
 
 **"ERR_CONNECTION_REFUSED" after Spotify authorization**
-- This is NORMAL! Copy the full URL from your browser's address bar and paste it back
+- This is NORMAL! The redirect URI `http://127.0.0.1:8888/callback` is intentionally not listening
+- Copy the full URL from your browser's address bar (including `?code=...`) and paste it back when prompted
 
 **Authentication prompts breaking Claude Desktop**
 - Make sure you have the latest version of `src/spotify_mcp/auth.py` (outputs to stderr, not stdout)
 
 **Tokens not saving**
 - Verify `.env` file exists in project root
-- Run `python test_auth.py` to test authentication
+- Run `python test_auth.py` to test authentication (now using 127.0.0.1)
 
-**Use 127.0.0.1, not localhost**
+**"Invalid redirect URI" errors**
 - Spotify requires explicit IPv4: `http://127.0.0.1:8888/callback`
 - Update both `.env` and Spotify Developer Dashboard
+- **Do not use `localhost`** - use `127.0.0.1` instead
 
 ### Common Issues
 

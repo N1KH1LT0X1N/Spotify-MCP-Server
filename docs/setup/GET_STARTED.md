@@ -40,7 +40,8 @@ Everything is configured and ready to look beautiful in Claude Desktop!
         "SPOTIFY_CLIENT_ID": "your_spotify_client_id_here",
         "SPOTIFY_CLIENT_SECRET": "your_spotify_client_secret_here",
         "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
-      }
+      },
+      "icon": "C:\\path\\to\\spotify_mcp\\icon.svg"
     }
   }
 }
@@ -50,7 +51,9 @@ Everything is configured and ready to look beautiful in Claude Desktop!
 1. Replace `C:\\path\\to\\your\\venv\\Scripts\\python.exe` with your actual Python path
 2. Replace `your_spotify_client_id_here` with your Spotify Client ID
 3. Replace `your_spotify_client_secret_here` with your Spotify Client Secret
-4. Get your credentials from: https://developer.spotify.com/dashboard
+4. Replace `C:\\path\\to\\spotify_mcp\\icon.svg` with the full path to your `icon.svg`
+5. **Use `127.0.0.1`, not `localhost`** - Spotify requires the explicit IPv4 address
+6. Get your credentials from: https://developer.spotify.com/dashboard
 
 ### Steps:
 
@@ -81,14 +84,16 @@ Everything is configured and ready to look beautiful in Claude Desktop!
 ┌───────────────────────────────────┐
 │ MCP Servers:                      │
 ├───────────────────────────────────┤
-│  (S)  spotify            [ON]  → │
-│  (V)  Vercel             [ON]  → │
+│  🎵  spotify            [ON]  → │
+│  ▲  Vercel              [ON]  → │
 └───────────────────────────────────┘
 ```
 
-- **(S)** = Green Spotify logo icon
+- **🎵** = Green Spotify logo icon (from the `icon` property!)
 - **spotify** = Clean, simple name
 - **[ON]** = Green toggle when connected
+
+**Note:** The icon will only appear if you added the `icon` property with the full path to `icon.svg` in your configuration!
 
 ---
 
@@ -109,11 +114,13 @@ Once connected, ask Claude:
 
 Your Spotify MCP Server will appear with:
 - ✅ Official Spotify green branding (#1DB954)
-- ✅ Recognizable Spotify logo
+- ✅ Recognizable Spotify logo (via `icon` property)
 - ✅ Clean "spotify" name (not a long technical name)
 - ✅ Professional appearance matching Vercel and other official MCP servers
 
 **Just like the Vercel server in your screenshot, but for Spotify!** 🎵✨
+
+**Remember:** Add the `icon` property to your config to see the beautiful Spotify icon!
 
 ---
 
