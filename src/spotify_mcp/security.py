@@ -10,6 +10,7 @@ Features:
 """
 
 import os
+import sys
 import json
 import time
 from datetime import datetime
@@ -20,9 +21,10 @@ from dotenv import load_dotenv, set_key
 # Optional: System keychain integration
 try:
     import keyring
-    KEYRING_AVAILABLE = True
 except ImportError:
-    KEYRING_AVAILABLE = False
+    keyring = None
+
+KEYRING_AVAILABLE = keyring is not None
 
 
 class SecurityManager:
