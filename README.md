@@ -13,7 +13,7 @@
 
 A comprehensive Model Context Protocol (MCP) server for Spotify, enabling AI assistants to control playback, manage playlists, search music, and more
 
-> **Note**: This is a production-ready MCP server with comprehensive documentation. If you encounter any issues during setup, check [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - it covers all common problems and solutions.
+> **Note**: This is a production-ready MCP server with comprehensive documentation. If you encounter any issues during setup, check [troubleshooting.md](docs/setup/troublrshooting.md) - it covers all common problems and solutions.
 
 ## ⚡ Quick Start
 
