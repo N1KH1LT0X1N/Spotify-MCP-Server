@@ -3,6 +3,7 @@
 import sys
 import json
 import asyncio
+from pathlib import Path
 from typing import Any, Dict
 from mcp.server import Server
 from mcp.types import Tool, TextContent
@@ -36,8 +37,8 @@ from spotify_mcp.tools.user import (
 )
 
 
-# Create server instance
-app = Server("spotify-mcp")
+# Create server instance with metadata
+app = Server("spotify")
 
 # Global Spotify client (initialized on first use)
 _spotify_client: SpotifyClient = None

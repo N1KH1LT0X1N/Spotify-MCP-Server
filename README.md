@@ -1,4 +1,9 @@
-# Spotify MCP Server
+# 🎵 Spotify MCP Server
+
+<div align="center">
+  <img src="icon.svg" alt="Spotify MCP Server" width="128" height="128">
+  <br><br>
+</div>
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![MCP](https://img.shields.io/badge/MCP-1.0-green.svg)](https://modelcontextprotocol.io)
@@ -12,7 +17,11 @@ A comprehensive Model Context Protocol (MCP) server for Spotify, enabling AI ass
 
 ## ⚡ Quick Start
 
-Get running in 5 minutes: [QUICKSTART.md](QUICKSTART.md)
+**Want to get it looking pretty in Claude Desktop?** → [docs/setup/QUICK_SETUP.md](docs/setup/QUICK_SETUP.md) ✨
+
+**Complete setup guide:** → [docs/setup/GET_STARTED.md](docs/setup/GET_STARTED.md) 🎵
+
+**Detailed documentation:** → [docs/](docs/README.md) 📚
 
 ## 🎯 What Can You Do?
 
@@ -91,7 +100,11 @@ On first run, the server will open your browser to authenticate with Spotify. Af
 
 ### With Claude Desktop
 
-Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+**Quick Setup:** See [docs/setup/QUICK_SETUP.md](docs/setup/QUICK_SETUP.md) for copy-paste configuration! 🎵
+
+**Detailed Guide:** See [docs/setup/CLAUDE_DESKTOP_SETUP.md](docs/setup/CLAUDE_DESKTOP_SETUP.md)
+
+Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
 
 ```json
 {
@@ -108,6 +121,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
   }
 }
 ```
+
+The Spotify icon will appear in Claude Desktop with the official green branding! 🎵
 
 ### Available Tools
 
@@ -147,7 +162,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 
 ## Troubleshooting
 
-For detailed troubleshooting, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
+For detailed troubleshooting, see [docs/setup/troubleshooting.md](docs/setup/troubleshooting.md).
 
 ### Quick Fixes
 
@@ -175,7 +190,7 @@ For detailed troubleshooting, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 - **Premium Required**: Playback control (play, pause, skip) requires Spotify Premium
 - **Rate Limits**: The server automatically handles Spotify's rate limits with exponential backoff
 
-For more details and solutions, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
+For more details and solutions, see [docs/setup/troubleshooting.md](docs/setup/troubleshooting.md).
 
 ## Development
 
@@ -190,6 +205,10 @@ python -m spotify_mcp.server
 ## License
 
 MIT
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for our security policy and best practices.
 
 ## Contributing
 

@@ -1,169 +1,338 @@
-# Utility Scripts
+# 🔧 Utility Scripts# Utility Scripts
 
-This folder contains utility scripts for managing and diagnosing the Spotify MCP Server.
 
-## Scripts
 
-### `diagnose_auth.py`
-**Purpose**: Diagnostic tool for troubleshooting authentication issues.
+Helper scripts for managing and diagnosing the Spotify MCP Server.This folder contains utility scripts for managing and diagnosing the Spotify MCP Server.
 
-**Usage**:
-```bash
-# Auto-diagnosis mode (recommended)
+
+
+## 🚀 Quick Start Scripts## Scripts
+
+
+
+### `generate_claude_config.py` ⭐### `diagnose_auth.py`
+
+**Generate Claude Desktop configuration automatically****Purpose**: Diagnostic tool for troubleshooting authentication issues.
+
+
+
+```bash**Usage**:
+
+python scripts/generate_claude_config.py```bash
+
+```# Auto-diagnosis mode (recommended)
+
 python scripts/diagnose_auth.py
 
-# Interactive menu mode
-python scripts/diagnose_auth.py --interactive
-```
+**What it does:**
+
+- Detects your Python environment# Interactive menu mode
+
+- Loads credentials from `.env`python scripts/diagnose_auth.py --interactive
+
+- Shows config file location```
+
+- Provides ready-to-use configurations
 
 **Features**:
-- Checks .env file configuration
+
+---- Checks .env file configuration
+
 - Validates credentials
-- Tests token refresh
-- Provides clear guidance and next steps
+
+### `verify_pretty_setup.py` ✅- Tests token refresh
+
+**Verify Claude Desktop setup is complete**- Provides clear guidance and next steps
+
 - Interactive troubleshooting menu
 
----
+```bash
+
+python scripts/verify_pretty_setup.py---
+
+```
 
 ### `enterprise_cli.py`
-**Purpose**: Command-line interface for enterprise security features.
 
-**Usage**:
-```bash
-# Revoke access for a profile
+**Checks:****Purpose**: Command-line interface for enterprise security features.
+
+- Icon file exists and is valid
+
+- Server metadata is correct**Usage**:
+
+- Claude Desktop config is present```bash
+
+- Documentation is available# Revoke access for a profile
+
 python scripts/enterprise_cli.py revoke [profile]
 
+---
+
 # View audit log
-python scripts/enterprise_cli.py audit [profile] [limit]
+
+### `diagnose_auth.py` 🔍python scripts/enterprise_cli.py audit [profile] [limit]
+
+**Diagnose authentication issues**
 
 # Check security alerts
-python scripts/enterprise_cli.py alerts
 
-# List profiles
+```bashpython scripts/enterprise_cli.py alerts
+
+# Auto-diagnosis mode (recommended)
+
+python scripts/diagnose_auth.py# List profiles
+
 python scripts/enterprise_cli.py profiles
 
-# Create new profile
-python scripts/enterprise_cli.py create-profile <name> <client_id> <client_secret>
+# Interactive menu mode
 
-# Enable keychain storage
-python scripts/enterprise_cli.py enable-keychain [profile]
+python scripts/diagnose_auth.py --interactive# Create new profile
 
-# Disable keychain storage
-python scripts/enterprise_cli.py disable-keychain [profile]
-```
+```python scripts/enterprise_cli.py create-profile <name> <client_id> <client_secret>
 
-**Examples**:
+
+
+**Features:**# Enable keychain storage
+
+- Checks `.env` file configurationpython scripts/enterprise_cli.py enable-keychain [profile]
+
+- Validates Spotify credentials
+
+- Tests token refresh# Disable keychain storage
+
+- Provides clear guidancepython scripts/enterprise_cli.py disable-keychain [profile]
+
+- Interactive troubleshooting menu```
+
+
+
+---**Examples**:
+
 ```bash
-# Revoke production profile
+
+## 🏢 Enterprise Scripts# Revoke production profile
+
 python scripts/enterprise_cli.py revoke production
 
-# View last 50 audit entries
+### `enterprise_cli.py`
+
+**Command-line interface for enterprise security features**# View last 50 audit entries
+
 python scripts/enterprise_cli.py audit default 50
 
-# Create new dev profile
-python scripts/enterprise_cli.py create-profile dev CLIENT_ID CLIENT_SECRET
-```
-
----
-
-### `verify_setup.py`
-**Purpose**: Verify Spotify MCP Server installation and configuration.
-
-**Usage**:
 ```bash
+
+# Common commands# Create new dev profile
+
+python scripts/enterprise_cli.py profiles        # List profilespython scripts/enterprise_cli.py create-profile dev CLIENT_ID CLIENT_SECRET
+
+python scripts/enterprise_cli.py audit           # View audit log```
+
+python scripts/enterprise_cli.py revoke          # Revoke access
+
+python scripts/enterprise_cli.py alerts          # Check alerts---
+
+
+
+# Profile management### `verify_setup.py`
+
+python scripts/enterprise_cli.py create-profile <name> <client_id> <client_secret>**Purpose**: Verify Spotify MCP Server installation and configuration.
+
+python scripts/enterprise_cli.py enable-keychain [profile]
+
+python scripts/enterprise_cli.py disable-keychain [profile]**Usage**:
+
+``````bash
+
 python scripts/verify_setup.py
-```
 
-**Checks**:
+---```
+
+
+
+## 🧪 Setup & Verification**Checks**:
+
 - Python version compatibility
-- Required dependencies installed
-- Configuration files present
+
+### `verify_setup.py`- Required dependencies installed
+
+**Verify installation and configuration**- Configuration files present
+
 - Environment variables set
-- MCP server can start
 
----
+```bash- MCP server can start
 
-### `auto_auth.py`
-**Purpose**: Experimental automated OAuth authentication (NOT RECOMMENDED).
+python scripts/verify_setup.py
 
-⚠️ **Warning**: This script uses Selenium to automate browser authentication. It requires storing your Spotify password, which is a security risk. Only use for testing/development purposes.
+```---
 
-**Why not recommended**:
+
+
+**Checks:**### `auto_auth.py`
+
+- ✅ Python version (3.10+)**Purpose**: Experimental automated OAuth authentication (NOT RECOMMENDED).
+
+- ✅ Dependencies installed
+
+- ✅ Configuration files present⚠️ **Warning**: This script uses Selenium to automate browser authentication. It requires storing your Spotify password, which is a security risk. Only use for testing/development purposes.
+
+- ✅ Environment variables set
+
+- ✅ MCP server can start**Why not recommended**:
+
 - Requires storing password in plaintext
-- Adds unnecessary complexity (Selenium dependency)
-- Manual OAuth flow is simple and secure
-- Breaks if Spotify changes their login page
 
-**Usage** (if you really need it):
-```bash
+---- Adds unnecessary complexity (Selenium dependency)
+
+- Manual OAuth flow is simple and secure
+
+## ⚠️ Experimental Scripts- Breaks if Spotify changes their login page
+
+
+
+### `auto_auth.py`**Usage** (if you really need it):
+
+**Automated OAuth (NOT RECOMMENDED)**```bash
+
 # Not recommended - use manual OAuth instead
-python scripts/auto_auth.py
+
+⚠️ **Security Risk**: Requires storing password in plaintext. Only for testing/development.python scripts/auto_auth.py
+
 ```
 
 ---
+
+---
+
+## 📋 Usage Guide
 
 ## Quick Start
 
 ### First Time Setup
-1. Run verification:
+
+### First Time Setup
+
+1. **Verify installation:**1. Run verification:
+
+   ```bash   ```bash
+
+   python scripts/verify_setup.py   python scripts/verify_setup.py
+
+   ```   ```
+
+
+
+2. **Check authentication:**2. If issues, run diagnostics:
+
+   ```bash   ```bash
+
+   python scripts/diagnose_auth.py   python scripts/diagnose_auth.py
+
+   ```   ```
+
+
+
+3. **Generate Claude config:**### Regular Usage
+
+   ```bash- **Check auth status**: `python scripts/diagnose_auth.py`
+
+   python scripts/generate_claude_config.py- **Revoke and re-auth**: `python scripts/enterprise_cli.py revoke`
+
+   ```- **View audit trail**: `python scripts/enterprise_cli.py audit`
+
+
+
+4. **Verify Claude setup:**---
+
    ```bash
-   python scripts/verify_setup.py
+
+   python scripts/verify_pretty_setup.py## Development
+
    ```
-
-2. If issues, run diagnostics:
-   ```bash
-   python scripts/diagnose_auth.py
-   ```
-
-### Regular Usage
-- **Check auth status**: `python scripts/diagnose_auth.py`
-- **Revoke and re-auth**: `python scripts/enterprise_cli.py revoke`
-- **View audit trail**: `python scripts/enterprise_cli.py audit`
-
----
-
-## Development
 
 ### Adding New Scripts
-1. Create script in this folder
-2. Add entry to this README
-3. Make script executable: `chmod +x script_name.py`
-4. Add shebang if needed: `#!/usr/bin/env python3`
 
-### Script Guidelines
+### Regular Usage1. Create script in this folder
+
+2. Add entry to this README
+
+- **Check auth status**: `python scripts/diagnose_auth.py`3. Make script executable: `chmod +x script_name.py`
+
+- **Update Claude config**: `python scripts/generate_claude_config.py`4. Add shebang if needed: `#!/usr/bin/env python3`
+
+- **Verify setup**: `python scripts/verify_pretty_setup.py`
+
+- **Enterprise features**: `python scripts/enterprise_cli.py --help`### Script Guidelines
+
 - Include docstring with purpose and usage
-- Add `if __name__ == "__main__":` guard
+
+---- Add `if __name__ == "__main__":` guard
+
 - Use argparse for CLI arguments
-- Provide helpful error messages
+
+## 🆘 Troubleshooting- Provide helpful error messages
+
 - Write to stderr for diagnostics (avoid polluting stdout)
 
----
+### "Module not found" errors
 
-## Troubleshooting
+```bash---
+
+# Set PYTHONPATH
+
+export PYTHONPATH="src"  # Linux/Mac## Troubleshooting
+
+$env:PYTHONPATH="src"    # Windows PowerShell
 
 ### "Module not found" errors
-```bash
-# Install in development mode
-pip install -e .
+
+# Or install in development mode```bash
+
+pip install -e .# Install in development mode
+
+```pip install -e .
+
 ```
 
 ### "No .env file found"
-```bash
-# Copy example and configure
-cp .env.example .env
-# Edit .env with your credentials
+
+```bash### "No .env file found"
+
+# Copy example and configure```bash
+
+cp .env.example .env# Copy example and configure
+
+# Edit .env with your credentialscp .env.example .env
+
+```# Edit .env with your credentials
+
 ```
 
 ### Authentication issues
-```bash
-# Run diagnostic tool
-python scripts/diagnose_auth.py --interactive
+
+```bash### Authentication issues
+
+# Run interactive diagnostics```bash
+
+python scripts/diagnose_auth.py --interactive# Run diagnostic tool
+
+```python scripts/diagnose_auth.py --interactive
+
 ```
 
 ---
 
+---
+
+## 📚 See Also
+
 ## See Also
 
-- [Authentication Guide](../docs/setup/authentication.md)
-- [Enterprise Security](../docs/enterprise/security.md)
-- [Troubleshooting Guide](../docs/setup/troubleshooting.md)
+- **[Quick Setup Guide](../docs/setup/QUICK_SETUP.md)** - Get started fast
+
+- **[Authentication Guide](../docs/setup/authentication.md)** - OAuth setup- [Authentication Guide](../docs/setup/authentication.md)
+
+- **[Enterprise Security](../docs/enterprise/security.md)** - Advanced features- [Enterprise Security](../docs/enterprise/security.md)
+
+- **[Troubleshooting Guide](../docs/setup/troubleshooting.md)** - Fix common issues- [Troubleshooting Guide](../docs/setup/troubleshooting.md)
+
