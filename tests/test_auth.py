@@ -19,6 +19,28 @@ from spotify_mcp.auth import SpotifyAuthManager, get_spotify_client
 from spotify_mcp.security import SecurityManager
 
 
+# Mock SpotifyOAuth to prevent real API calls
+@pytest.fixture(autouse=True)
+def mock_spotify_oauth():
+    """Mock SpotifyOAuth to prevent real API calls during tests."""
+    with patch('spotify_mcp.auth.SpotifyOAuth') as mock_oauth:
+        mock_instance = Mock()
+        mock_instance.get_authorize_url.return_value = "http://mock.url"
+        mock_instance.parse_response_code.return_value = "mock_code"
+        mock_instance.get_access_token.return_value = {
+            "access_token": "mock_access",
+            "refresh_token": "mock_refresh",
+            "expires_at": 9999999999
+        }
+        mock_instance.refresh_access_token.return_value = {
+            "access_token": "new_mock_access",
+            "refresh_token": "new_mock_refresh",
+            "expires_at": 9999999999
+        }
+        mock_oauth.return_value = mock_instance
+        yield mock_instance
+
+
 @pytest.fixture
 def temp_env_file():
     """Create a temporary .env file for testing."""
