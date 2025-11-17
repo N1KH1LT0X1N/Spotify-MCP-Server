@@ -295,6 +295,59 @@ def seek_to_position(client: SpotifyClient, position_ms: int,
     }
 
 
+def get_recently_played(client: SpotifyClient, limit: int = 20, 
+                        after: Optional[int] = None, before: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Get the current user's recently played tracks.
+    
+    Args:
+        limit: Maximum number of items to return (1-50, default 20)
+        after: Unix timestamp in milliseconds - returns tracks played after this time
+        before: Unix timestamp in milliseconds - returns tracks played before this time
+    
+    Returns:
+        List of recently played tracks with play history context
+    
+    Note:
+        Only one of 'after' or 'before' can be specified at a time.
+    """
+    if limit < 1 or limit > 50:
+        raise ValueError("Limit must be between 1 and 50")
+    
+    if after is not None and before is not None:
+        raise ValueError("Cannot specify both 'after' and 'before' parameters")
+    
+    response = client.current_user_recently_played(limit=limit, after=after, before=before)
+    
+    items = response.get("items", [])
+    
+    return {
+        "items": [
+            {
+                "track": {
+                    "name": item["track"]["name"],
+                    "uri": item["track"]["uri"],
+                    "id": item["track"]["id"],
+                    "duration_ms": item["track"]["duration_ms"],
+                    "artists": [{"name": a["name"], "uri": a["uri"]} for a in item["track"]["artists"]],
+                    "album": {
+                        "name": item["track"]["album"]["name"],
+                        "uri": item["track"]["album"]["uri"],
+                    }
+                },
+                "played_at": item.get("played_at"),
+                "context": {
+                    "type": item["context"]["type"] if item.get("context") else None,
+                    "uri": item["context"]["uri"] if item.get("context") else None,
+                }
+            }
+            for item in items
+        ],
+        "total": len(items),
+        "cursors": response.get("cursors", {})
+    }
+
+
 # Tool definitions for MCP
 PLAYBACK_TOOLS = [
     {
@@ -475,6 +528,30 @@ PLAYBACK_TOOLS = [
                 }
             },
             "required": ["position_ms"]
+        }
+    },
+    {
+        "name": "get_recently_played",
+        "description": "Get the current user's recently played tracks with timestamps and context.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer",
+                    "description": "Maximum number of items to return (1-50)",
+                    "minimum": 1,
+                    "maximum": 50,
+                    "default": 20
+                },
+                "after": {
+                    "type": "integer",
+                    "description": "Unix timestamp in milliseconds - returns tracks played after this time"
+                },
+                "before": {
+                    "type": "integer",
+                    "description": "Unix timestamp in milliseconds - returns tracks played before this time"
+                }
+            }
         }
     }
 ]

@@ -402,7 +402,7 @@ If you're still stuck after checking this guide:
 5. **Create an issue** with:
    - Operating system
    - Python version
-   - Output from `verify_setup.py`
+   - Output from `scripts/verify_setup.py`
    - Error messages (without credentials!)
    - Steps to reproduce
 
@@ -412,7 +412,7 @@ If you're still stuck after checking this guide:
 
 You know everything is working when:
 
-✅ `python verify_setup.py` shows all checks passed  
+✅ `python scripts/verify_setup.py` shows all checks passed  
 ✅ `python test_auth.py` successfully authenticates  
 ✅ `.env` file contains long token strings  
 ✅ Claude Desktop shows Spotify tools available (🔌 icon)  

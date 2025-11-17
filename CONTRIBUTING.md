@@ -1,17 +1,22 @@
 # Contributing to Spotify MCP Server
 
-Thanks for your interest in contributing! This guide will help you add new features and tools.
+**Welcome!** 🎵 Whether you're fixing a bug, adding features, or improving docs—your contributions make this project better for everyone.
 
-## Development Setup
+This guide walks you through adding new tools and features to the Spotify MCP Server. It's designed to be clear and practical.
+
+## 🚀 Development Setup
 
 ```bash
 # Clone and install in development mode
 git clone <your-repo>
 cd spotify-mcp
-pip install -e .
+pip install -e ".[dev]"  # Includes test dependencies
 
-# Run verification
-python verify_setup.py
+# Verify everything works
+python scripts/verify_setup.py
+
+# Run tests
+pytest
 ```
 
 ## Project Structure
@@ -25,7 +30,15 @@ spotify-mcp/
 │   └── tools/             # Tool implementations
 │       ├── playback.py    # Playback control
 │       ├── search.py      # Search & recommendations
-│       ├── library.py     # Library management
+│       ├── library.py     # Library management (tracks)
+│       ├── albums.py      # Album operations
+│       ├── artists.py     # Artist operations
+│       ├── audiobooks.py  # Audiobook operations
+│       ├── categories.py  # Category browsing
+│       ├── chapters.py    # Audiobook chapters
+│       ├── episodes.py    # Podcast episodes
+│       ├── genres.py      # Genre discovery
+│       ├── markets.py     # Market information
 │       ├── playlists.py   # Playlist operations
 │       ├── queue.py       # Queue management
 │       └── user.py        # User info
@@ -141,10 +154,9 @@ def your_api_method(self, param1: str, param2: int):
 - `get_audio_analysis` - Get detailed audio analysis
 - `analyze_playlist` - Analyze characteristics of a playlist
 
-### Advanced Library
-- `get_saved_albums` - Get saved albums
-- `save_albums` / `remove_saved_albums` - Manage saved albums
+### Advanced Library - Shows & Podcasts
 - `get_saved_shows` - Get saved podcasts
+- `save_shows` / `remove_saved_shows` - Manage saved podcasts
 
 ### Follow Management
 - `get_followed_artists` - Get followed artists
@@ -164,6 +176,8 @@ def your_api_method(self, param1: str, param2: int):
 
 ### Recently Played
 - `get_recently_played` - Get recently played tracks
+
+**Note:** Album operations (get_album, get_several_albums, get_album_tracks, get_saved_albums, save_albums, remove_saved_albums, check_saved_albums, get_new_releases) are now fully implemented in Phase 1!
 
 ## Best Practices
 

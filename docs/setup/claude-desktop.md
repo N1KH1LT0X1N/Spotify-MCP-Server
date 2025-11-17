@@ -293,7 +293,7 @@ If you see Spotify tools available in Claude's tool panel, you're all set! 🎉
 
 If something isn't working:
 1. Check the troubleshooting section above
-2. Run `python verify_setup.py` in the project directory
+2. Run `python scripts/verify_setup.py` in the project directory
 3. Check Claude Desktop logs
 4. Make sure all paths are absolute, not relative
 5. Ensure Spotify credentials are correct

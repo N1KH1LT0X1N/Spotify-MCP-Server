@@ -11,45 +11,102 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-A comprehensive Model Context Protocol (MCP) server for Spotify, enabling AI assistants to control playback, manage playlists, search music, and more
+**Transform your AI assistant into a Spotify DJ.** Natural language commands become instant music control—search songs, manage playlists, control playback, discover new artists, and explore your entire library through simple conversation.
 
-> **Note**: This is a production-ready MCP server with comprehensive documentation. If you encounter any issues during setup, check [docs/setup/troubleshooting.md](docs/setup/troubleshooting.md) - it covers all common problems and solutions.
+> **Production-ready** with 86 tools (100% Spotify API coverage), comprehensive docs, and battle-tested reliability. Setup in 5 minutes. Issues? Check [troubleshooting](docs/setup/troubleshooting.md) for instant solutions.
 
 ## ⚡ Quick Start
 
-**Want to get it looking pretty in Claude Desktop?** → [docs/setup/QUICK_SETUP.md](docs/setup/QUICK_SETUP.md) ✨
+**New here?** → Run `python tools/setup_guide.py` for interactive setup! 🎯
 
-**Complete setup guide:** → [docs/setup/GET_STARTED.md](docs/setup/GET_STARTED.md) 🎵
+**Want Claude Desktop config?** → [docs/setup/QUICK_SETUP.md](docs/setup/QUICK_SETUP.md) ✨
 
-**Detailed documentation:** → [docs/](docs/README.md) 📚
+**Prefer step-by-step?** → [docs/setup/GET_STARTED.md](docs/setup/GET_STARTED.md) 📖
 
-## 🎯 What Can You Do?
+**All documentation:** → [docs/](docs/README.md) 📚
 
-Ask your AI assistant:
+## 🎯 What You Can Do
+
+Just talk naturally to your AI:
+
+**🎵 Control Your Music**
 - "Play my Discover Weekly playlist"
-- "Search for jazz music and create a playlist"
+- "Pause and skip to the next track"
+- "Turn the volume down to 40%"
+
+**🔍 Discover & Explore**
+- "Find me some chill jazz tracks"
+- "Show me albums by Radiohead"
+- "What are similar artists to Tame Impala?"
+
+**📚 Manage Your Library**
+- "Save this album to my library"
 - "What are my top artists this month?"
-- "Add this song to my queue"
-- "Show me recommendations based on chill vibes"
-- "Pause playback and skip to the next track"
-- "Create a playlist called 'Workout Mix' and add energetic songs"
+- "Create a playlist called 'Workout Mix'"
 
-## Features
+**💡 Get Smart**
+- "Recommend songs based on chill vibes"
+- "Show me new album releases"
+- "Add this to my queue for later"
 
-### Current (v1.0)
-- **Playback Control**: Play, pause, skip, control volume, switch devices
-- **Search & Discovery**: Search tracks/albums/artists/playlists, get recommendations
-- **Library Management**: Manage saved tracks
-- **Playlist Operations**: Create, view, and modify playlists
-- **Queue Management**: View and add to queue
-- **User Info**: Get profile and listening statistics
+## ✨ Features
 
-### Coming Soon
-- Audio analysis and features
-- Smart playlist operations
-- Podcast support
-- Advanced library management (albums, shows)
-- Batch operations
+### 🚀 v1.0 - Production Ready (86 Tools - 100% API Coverage)
+
+**🎵 Playback Control** (12 tools)
+Full control over your music: play, pause, skip, volume, shuffle, repeat, seek, device switching, recently played history
+
+**🔍 Search & Discovery** (2 tools)
+Find anything on Spotify and get personalized recommendations
+
+**💾 Library Management** (4 tools)
+Save, remove, and check your favorite tracks
+
+**📀 Album Operations** (8 tools)
+Explore albums, save to library, discover new releases
+
+**🎤 Artist Operations** (5 tools)
+Dive deep into artist profiles, discographies, and related artists
+
+**📚 Audiobook Operations** (7 tools)
+Browse, save, and manage audiobooks and chapters
+
+**🏷️ Category Browsing** (2 tools)
+Explore Spotify content categories by genre, mood, and region
+
+**📖 Chapter Access** (2 tools)
+Navigate audiobook chapters with detailed information
+
+**🎙️ Episode Management** (6 tools)
+Browse, save, and manage podcast episodes
+
+**🎸 Genre Discovery** (1 tool)
+Get available genre seeds for music recommendations
+
+**🌍 Market Information** (1 tool)
+Check Spotify availability by country
+
+**🎶 Playlist Operations** (14 tools)
+Create, modify, manage, and discover playlists—update details, reorder tracks, upload covers, follow/unfollow, browse featured and category playlists
+
+**⏯️ Queue Management** (2 tools)
+View and control what plays next
+
+**👤 User Info** (8 tools)
+Access profiles, follow/unfollow artists and users, check followings, and get listening statistics
+
+**📻 Show Management** (7 tools)
+Browse podcasts, save shows, get episodes
+
+**🎵 Track Operations** (5 tools)
+Get track details, audio features, and audio analysis
+
+### 🔮 Coming in Future Releases
+
+**Power Features**
+- Batch operations for efficiency
+- Advanced library filtering and organization
+- Social features (follow/unfollow artists and users)
 
 ## Prerequisites
 
@@ -94,7 +151,7 @@ SPOTIFY_REDIRECT_URI=http://127.0.0.1:8888/callback
 
 ### 4. Authenticate with Spotify
 
-On first run, the server will open your browser to authenticate with Spotify. After granting permission, you'll be redirected to localhost, and the server will automatically save your tokens.
+On first run, the server will open your browser to authenticate with Spotify. After granting permission, you'll be redirected to `http://127.0.0.1:8888/callback`, and the server will automatically save your tokens.
 
 ## Usage
 
@@ -135,16 +192,46 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - `get_current_playback` - Get current playback state
 - `get_available_devices` - List available Spotify Connect devices
 - `transfer_playback` - Switch playback to a different device
+- `set_volume` - Set playback volume
+- `set_shuffle` - Toggle shuffle mode
+- `set_repeat` - Set repeat mode
+- `seek_to_position` - Seek to position in track
 
 #### Search & Discovery
 - `search` - Search for tracks, albums, artists, or playlists
 - `get_recommendations` - Get track recommendations based on seeds
 
-#### Library Management
+#### Library Management - Tracks
 - `get_saved_tracks` - Get user's saved tracks
 - `save_tracks` - Save tracks to library
 - `remove_saved_tracks` - Remove tracks from library
 - `check_saved_tracks` - Check if tracks are saved
+
+#### Album Operations
+- `get_album` - Get album details and tracks
+- `get_several_albums` - Get multiple albums efficiently
+- `get_album_tracks` - Get tracks from an album
+- `get_saved_albums` - Get user's saved albums
+- `save_albums` - Save albums to library
+- `remove_saved_albums` - Remove albums from library
+- `check_saved_albums` - Check if albums are saved
+- `get_new_releases` - Get new album releases
+
+#### Artist Operations
+- `get_artist` - Get artist details, genres, and popularity
+- `get_several_artists` - Get multiple artists efficiently
+- `get_artist_albums` - Get artist's albums, singles, and compilations
+- `get_artist_top_tracks` - Get artist's top tracks by market
+- `get_artist_related_artists` - Get similar artists
+
+#### Audiobook Operations
+- `get_audiobook` - Get audiobook details, chapters, authors, and narrators
+- `get_several_audiobooks` - Get multiple audiobooks efficiently
+- `get_audiobook_chapters` - Get chapters from an audiobook
+- `get_saved_audiobooks` - Get user's saved audiobooks
+- `save_audiobooks` - Save audiobooks to library
+- `remove_saved_audiobooks` - Remove audiobooks from library
+- `check_saved_audiobooks` - Check if audiobooks are saved
 
 #### Playlist Operations
 - `get_user_playlists` - Get user's playlists
@@ -195,24 +282,63 @@ For detailed troubleshooting, see [docs/setup/troubleshooting.md](docs/setup/tro
 
 For more details and solutions, see [docs/setup/troubleshooting.md](docs/setup/troubleshooting.md).
 
-## Development
+## 🚀 Development
 
 ```bash
-# Install in development mode
-pip install -e .
+# Install with dev dependencies
+pip install -e ".[dev]"
 
-# Run the server
-python -m spotify_mcp.server
+# Run tests
+pytest
+
+# Check code quality
+black src/ tests/
+isort src/ tests/
+flake8 src/ tests/
 ```
 
-## License
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.
 
-MIT
+## 📄 License
 
-## Security
+MIT License - see [LICENSE](LICENSE) for details.
 
-See [SECURITY.md](SECURITY.md) for our security policy and best practices.
+## 🔒 Security
 
-## Contributing
+We take security seriously. See [SECURITY.md](SECURITY.md) for:
+- Security best practices
+- Token storage and encryption
+- Enterprise security features
+- How to report vulnerabilities
 
-Contributions welcome! Please open an issue or PR.
+## 🤝 Contributing
+
+Contributions are welcome! Whether it's:
+- 🐛 Bug fixes
+- ✨ New features
+- 📖 Documentation improvements
+- 🎨 UI/UX enhancements
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+
+## 🆘 Support
+
+**Having issues?**
+- 📖 Check [troubleshooting guide](docs/setup/troubleshooting.md)
+- 🔍 Search [existing issues](https://github.com/N1KH1LT0X1N/Spotify-MCP-Server/issues)
+- 💬 Open a [new issue](https://github.com/N1KH1LT0X1N/Spotify-MCP-Server/issues/new)
+
+**Want to help?**
+- ⭐ Star this repo
+- 🍴 Fork and contribute
+- 📢 Share with others
+
+---
+
+<div align="center">
+  
+**Made with 🎵 for the AI + Music community**
+
+[Documentation](docs/README.md) • [Contributing](CONTRIBUTING.md) • [Security](SECURITY.md) • [License](LICENSE)
+
+</div>

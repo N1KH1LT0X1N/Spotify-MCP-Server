@@ -85,7 +85,8 @@ def check_spotify_app():
     print("3. Click 'Create app'")
     print("4. Fill in:")
     print("   - App name: (anything you like)")
-    print("   - Redirect URI: http://localhost:8888/callback")
+    print("   - Redirect URI: http://127.0.0.1:8888/callback")
+    print("   ⚠️  IMPORTANT: Use 127.0.0.1, not localhost!")
     print("5. Copy Client ID and Client Secret to .env file")
 
 
@@ -109,10 +110,14 @@ def main():
     print("\n" + "=" * 50)
     
     if all_passed:
-        print("\n✓ All checks passed!")
-        print("\nYou're ready to run the server:")
-        print("  python -m spotify_mcp.server")
-        print("\nOn first run, you'll be prompted to authenticate with Spotify.")
+        print("\n✅ All checks passed! Your Spotify MCP Server is ready!")
+        print("\n🚀 Next Steps:")
+        print("\n1. Standalone testing:")
+        print("   python test_auth.py")
+        print("\n2. Use with Claude Desktop:")
+        print("   See docs/setup/QUICK_SETUP.md for configuration")
+        print("\n3. On first run, you'll authenticate with Spotify in your browser.")
+        print("   After authorization, copy the full URL and paste it back.")
     else:
         print("\n❌ Some checks failed. Please fix the issues above.")
         check_spotify_app()

@@ -40,6 +40,14 @@ spotify_mcp/
 │           ├── playback.py          # Playback control
 │           ├── search.py            # Search & discovery
 │           ├── library.py           # Library management
+│           ├── albums.py            # Album operations
+│           ├── artists.py           # Artist operations
+│           ├── audiobooks.py        # Audiobook operations
+│           ├── categories.py        # Category browsing
+│           ├── chapters.py          # Audiobook chapters
+│           ├── episodes.py          # Podcast episodes
+│           ├── genres.py            # Genre discovery
+│           ├── markets.py           # Market information
 │           ├── playlists.py         # Playlist operations
 │           ├── queue.py             # Queue management
 │           └── user.py              # User info
@@ -50,7 +58,7 @@ spotify_mcp/
 │   ├── test_security.py             # Security tests (35 tests)
 │   └── test_integration.py          # Integration tests (10 tests)
 │
-├── 🔧 scripts/                       # Utility scripts
+├── 🔧 scripts/                       # Development scripts
 │   ├── README.md                    # Scripts documentation
 │   ├── generate_claude_config.py    # Generate Claude config
 │   ├── verify_pretty_setup.py       # Verify setup
@@ -59,25 +67,31 @@ spotify_mcp/
 │   ├── verify_setup.py              # Setup verification
 │   └── auto_auth.py                 # Auto auth (not recommended)
 │
+├── 🛠️ tools/                         # Utility tools
+│   ├── verify_tools.py              # Tool verification script
+│   ├── test_auth.py                 # Standalone auth testing
+│   └── setup_guide.py               # Interactive setup assistant
+│
 ├── ⚙️ .github/                       # GitHub configuration
-│   └── workflows/                   # CI/CD workflows
-│       └── test.yml                 # Automated testing
+│   ├── workflows/                   # CI/CD workflows
+│   │   └── test.yml                 # Automated testing
+│   └── requirements-dev.txt         # Development dependencies
 │
 ├── 🗄️ .archive/                     # Archived old files
 │   └── ...                          # Old documentation
 │
 ├── 📄 Root Files
-│   ├── README.md                    # Project overview
+│   ├── README.md                    # Project overview & setup
+│   ├── CHANGELOG.md                 # Version history
 │   ├── CONTRIBUTING.md              # Contribution guidelines
 │   ├── SECURITY.md                  # Security policy
 │   ├── STRUCTURE.md                 # This file - repository structure
 │   ├── LICENSE                      # MIT License
 │   ├── pyproject.toml               # Package configuration
-│   ├── .env.example                 # Environment template
+│   ├── .env.example                 # Environment template (detailed)
 │   ├── .gitignore                   # Git ignore rules
 │   ├── .pre-commit-config.yaml      # Pre-commit hooks
-│   ├── icon.svg                     # Spotify branding (Claude Desktop)
-│   └── requirements-dev.txt         # Dev dependencies
+│   └── icon.svg                     # Spotify branding (Claude Desktop)
 │
 └── 🔒 Generated/Runtime Files
     ├── .env                         # Your credentials (git-ignored)
@@ -93,41 +107,63 @@ spotify_mcp/
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| **Documentation** | 16 files | Setup, development, enterprise guides |
-| **Source Code** | 11 files | Main package + 6 tool modules |
+| **Documentation** | 20 files | Setup, development, enterprise guides |
+| **Source Code** | 19 files | Main package + 14 tool modules |
+| **Tests** | 4 files | Comprehensive test suite |
+| **Scripts** | 6 files | Development and diagnostic tools |
+| **Tools** | 3 files | Utility and verification tools |
+| **Config** | 8 files | Project and environment configuration |
+| **Total** | ~60 files | Clean, organized structure |
 | **Tests** | 4 files | 69 tests (100% pass rate) |
 | **Scripts** | 7 files | Setup, diagnostics, enterprise tools |
 | **Config** | 6 files | Package, CI/CD, pre-commit |
 | **Root** | 6 files | README, SECURITY, CONTRIBUTING, etc. |
 
-**Total Tracked Files:** ~50 files (clean and organized!)
+**Total Tracked Files:** ~55 files (clean and organized!)
 
 ## 🎯 Key Features
 
-### ✅ Clean Structure
+### ✅ Beginner-Friendly
+- **Interactive setup guide** (`setup_guide.py`) - step-by-step wizard
+- **Standalone auth test** (`test_auth.py`) - verify credentials easily
+- **Comprehensive docs** with copy-paste examples
+- **Detailed troubleshooting** for common issues
+
+### ✅ Production-Ready Architecture
 - **Organized documentation** in `docs/` folder
 - **All source code** in `src/spotify_mcp/`
-- **Complete test suite** in `tests/`
-- **Utility scripts** in `scripts/`
-- **Minimal root directory** (only 4 essential files)
+- **Complete test suite** (69 tests, 100% pass rate)
+- **Utility scripts** for diagnostics and setup
+- **Clean root** with only essential files
 
 ### ✅ Professional Setup
 - **CI/CD pipeline** with GitHub Actions
 - **Pre-commit hooks** for code quality
-- **Comprehensive tests** (69 tests, 86% security coverage)
+- **46 production tools** across 9 categories
+- **65 production tools** across 14 categories
+- **77 production tools** across 16 categories
 - **Enterprise features** (keychain, audit logging, multi-profile)
 
-### ✅ Great Documentation
-- **Quick setup guides** for fast onboarding
-- **Detailed troubleshooting** for common issues
-- **Enterprise guides** for advanced features
-- **Development docs** for contributors
+### ✅ Developer Experience
+- **Clear contribution guide** with examples
+- **Comprehensive API docs** and patterns
+- **Active development** with roadmap
+- **Type hints** and modern Python practices
 
 ## 🚀 Getting Started
 
-1. **First time?** Start with [docs/setup/QUICK_SETUP.md](docs/setup/QUICK_SETUP.md)
-2. **Want details?** See [docs/setup/GET_STARTED.md](docs/setup/GET_STARTED.md)
-3. **Need help?** Check [docs/setup/troubleshooting.md](docs/setup/troubleshooting.md)
+**New to this project?**
+1. Run `python setup_guide.py` for interactive setup
+2. Or see [docs/setup/QUICK_SETUP.md](docs/setup/QUICK_SETUP.md) for fast config
+
+**Want to contribute?**
+1. Check [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
+2. See Phase 2 roadmap for feature ideas
+3. Open an issue to discuss your idea
+
+**Need help?**
+1. [docs/setup/troubleshooting.md](docs/setup/troubleshooting.md) for common issues
+2. [docs/README.md](docs/README.md) for all documentation
 
 ## 🤝 Contributing
 

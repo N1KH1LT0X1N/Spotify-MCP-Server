@@ -51,12 +51,19 @@ The icon should appear in the bottom-left corner with a green toggle switch. Jus
 
 ## Try These Commands:
 
+With **58 tools** across **14 categories**, you can:
+
 - "Play my Discover Weekly playlist"
 - "What's currently playing?"
 - "Search for chill jazz music"
-- "Show me my top artists"
+- "Show me my top artists this month"
 - "Add this song to my queue"
+- "Find albums by Radiohead"
+- "Save this podcast episode"
+- "What audiobooks do I have saved?"
+- "Show me new music releases"
+- "Get recommendations based on this track"
 
 ---
 
-**Need help?** See `CLAUDE_DESKTOP_SETUP.md` for detailed instructions.
+**Need help?** See [CLAUDE_DESKTOP_SETUP.md](CLAUDE_DESKTOP_SETUP.md) for detailed instructions or [troubleshooting.md](troubleshooting.md) for common issues.

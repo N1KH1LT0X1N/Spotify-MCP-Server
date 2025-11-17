@@ -245,6 +245,10 @@ class SpotifyAuthManager:
         eprint("Paste the redirect URL here: ")
         response_url = input().strip()
         
+        # Validate the redirect URL to prevent injection
+        if not response_url.startswith(self.redirect_uri.split('?')[0]):
+            raise ValueError(f"Invalid redirect URL. Must start with: {self.redirect_uri}")
+        
         # Extract code and get token
         try:
             code = self.sp_oauth.parse_response_code(response_url)

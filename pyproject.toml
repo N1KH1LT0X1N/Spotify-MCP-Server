@@ -4,14 +4,14 @@ build-backend = "setuptools.build_backend"
 
 [project]
 name = "spotify-mcp"
-version = "0.1.0"
-description = "🎵 Spotify MCP Server - Control Spotify with AI"
+version = "1.0.0"
+description = "🎵 Control Spotify through AI - 58 powerful tools across 14 categories for playback, playlists, discovery, and more"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
     {name = "N1KH1LT0X1N", email = ""},
 ]
-keywords = ["spotify", "mcp", "ai", "model-context-protocol", "claude"]
+keywords = ["spotify", "mcp", "ai", "model-context-protocol", "claude", "music", "assistant"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -23,9 +23,9 @@ classifiers = [
 ]
 dependencies = [
     "mcp>=1.0.0",
-    "spotipy>=2.23.0",
-    "python-dotenv>=1.0.0",
-    "pydantic>=2.0.0",
+    "spotipy>=2.24.0",  # Security: Use latest stable
+    "python-dotenv>=1.0.1",  # Security: CVE fixes
+    "pydantic>=2.5.0",  # Security: Validation improvements
 ]
 
 [project.optional-dependencies]

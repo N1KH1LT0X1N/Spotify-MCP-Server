@@ -1,6 +1,6 @@
-# Quick Start Guide
+# ⚡ Quick Start Guide
 
-Get your Spotify MCP server running in 5 minutes!
+**5 minutes to AI-powered Spotify control.** This guide gets you from zero to playing music through Claude Desktop in just a few steps.
 
 ## Step 1: Install Dependencies (1 minute)
 
@@ -45,10 +45,10 @@ SPOTIFY_REDIRECT_URI=http://127.0.0.1:8888/callback
 ## Step 4: Verify Setup (30 seconds)
 
 ```bash
-python verify_setup.py
+python scripts/verify_setup.py
 ```
 
-If all checks pass ✓, you're ready!
+If all checks pass ✅, you're ready!
 
 ## Step 5: First Run (30 seconds)
 
@@ -157,22 +157,36 @@ Run `python test_auth.py` to verify authentication works and tokens are saved to
 2. Use the full absolute path to `icon.svg`
 3. Restart Claude Desktop completely
 
-For more troubleshooting, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
+For more troubleshooting, see [troubleshooting.md](troubleshooting.md).
 
 ## What's Included
 
-**22 Tools Ready to Use:**
-- Playback control (play, pause, skip, volume, shuffle, repeat, seek)
-- Device management
-- Search (tracks, albums, artists, playlists)
-- Recommendations
-- Library management (save/remove tracks)
-- Playlist creation and management
-- Queue management
-- User profile and top tracks/artists
+## ✅ **58 Tools Ready to Use Across 14 Categories:**
+
+### Core Features
+- **Playback control** (11 tools) - Play, pause, skip, volume, shuffle, repeat, seek, device switching
+- **Search & Discovery** (2 tools) - Multi-type search, AI-powered recommendations
+- **Library management** (4 tools) - Save, remove, check your favorite tracks
+- **Queue management** (2 tools) - View and control what plays next
+- **User info** (2 tools) - Profile and listening statistics
+
+### Content Discovery & Management
+- **Album operations** (8 tools) - Browse, save, manage albums, discover new releases
+- **Artist operations** (5 tools) - Artist profiles, discographies, top tracks, related artists
+- **Playlist management** (5 tools) - Create, modify, and manage playlists
+
+### Audiobooks & Podcasts
+- **Audiobook operations** (7 tools) - Browse audiobooks, manage library
+- **Chapter access** (2 tools) - Navigate audiobook chapters
+- **Episode management** (6 tools) - Complete podcast episode CRUD operations
+
+### Discovery Tools
+- **Category browsing** (2 tools) - Explore Spotify content categories by region
+- **Genre discovery** (1 tool) - Get available genre seeds for recommendations
+- **Market information** (1 tool) - Check Spotify availability by country
 
 ## Next Steps
 
-- Check out the full [README.md](README.md) for all features
-- See tool documentation in the code for advanced usage
+- Check out the full [README](../../README.md) for all features
+- See [roadmap](../development/roadmap.md) for future plans
 - Star the repo if you find it useful!
