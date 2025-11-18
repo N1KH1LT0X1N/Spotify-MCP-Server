@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -e ".[dev]"
+        pip install -e ".[dev,all]"
         pip install keyring || true
 
     - name: Run linting
@@ -42,12 +42,20 @@ jobs:
       run: |
         mypy src --ignore-missing-imports || true
 
-    - name: Run tests
+    - name: Run unit tests
       env:
         SPOTIFY_CLIENT_ID: test_client_id
         SPOTIFY_CLIENT_SECRET: test_client_secret
       run: |
         pytest tests/ -v --cov=src/spotify_mcp --cov-report=xml --cov-report=term --maxfail=1
+
+    - name: Run integration tests
+      run: |
+        python test_caching_integration.py
+        python test_metrics_integration.py
+        python test_cli_integration.py
+        python test_logging_integration.py
+        python test_config_integration.py
 
     - name: Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'

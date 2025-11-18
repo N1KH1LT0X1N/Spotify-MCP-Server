@@ -1,0 +1,90 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+
+    - name: Run Black (formatting check)
+      run: |
+        black --check src tests
+
+    - name: Run isort (import sorting check)
+      run: |
+        isort --check-only src tests
+
+    - name: Run Flake8 (linting)
+      run: |
+        flake8 src tests --max-line-length=100 --extend-ignore=E203,W503 --exclude=__pycache__
+
+    - name: Run mypy (type checking)
+      continue-on-error: true
+      run: |
+        mypy src --ignore-missing-imports --no-strict-optional
+
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install safety bandit
+
+    - name: Run Safety (dependency vulnerability scan)
+      continue-on-error: true
+      run: |
+        safety check --json
+
+    - name: Run Bandit (security scan)
+      continue-on-error: true
+      run: |
+        bandit -r src/ -f json
+
+  complexity:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install complexity tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install radon
+
+    - name: Run Radon (complexity analysis)
+      continue-on-error: true
+      run: |
+        radon cc src/ -a -nb
+        radon mi src/ -nb

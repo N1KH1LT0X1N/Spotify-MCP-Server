@@ -1,0 +1,97 @@
+groups:
+  - name: critical_alerts
+    interval: 30s
+    rules:
+      # Service availability
+      - alert: SpotifyMCPDown
+        expr: up{job="spotify-mcp-server"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: server
+        annotations:
+          summary: "Spotify MCP Server is down"
+          description: "The Spotify MCP Server instance {{ $labels.instance }} has been down for more than 1 minute."
+          runbook_url: "https://github.com/N1KH1LT0X1N/Spotify-MCP-Server/blob/main/docs/runbooks/service-down.md"
+
+      # High error rate
+      - alert: HighErrorRate
+        expr: |
+          rate(spotify_mcp_tool_requests_total{status="error"}[5m]) /
+          rate(spotify_mcp_tool_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: tools
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes."
+
+      # Spotify API connectivity
+      - alert: SpotifyAPIUnreachable
+        expr: spotify_mcp_health_check{check="spotify_api",status="unhealthy"} == 1
+        for: 2m
+        labels:
+          severity: critical
+          component: spotify_api
+        annotations:
+          summary: "Spotify API is unreachable"
+          description: "Cannot connect to Spotify API for more than 2 minutes."
+
+      # Circuit breaker opened
+      - alert: CircuitBreakerOpen
+        expr: spotify_mcp_circuit_breaker_state{state="open"} == 1
+        for: 2m
+        labels:
+          severity: warning
+          component: resilience
+        annotations:
+          summary: "Circuit breaker {{ $labels.name }} is OPEN"
+          description: "Circuit breaker for {{ $labels.name }} has been open for more than 2 minutes."
+
+      # Rate limit approaching
+      - alert: SpotifyRateLimitWarning
+        expr: spotify_mcp_rate_limit_remaining < 10
+        for: 1m
+        labels:
+          severity: warning
+          component: rate_limiting
+        annotations:
+          summary: "Spotify API rate limit approaching"
+          description: "Only {{ $value }} requests remaining before rate limit."
+
+      # Cache degraded
+      - alert: LowCacheHitRate
+        expr: spotify_mcp_cache_hit_rate < 0.5
+        for: 10m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate is {{ $value | humanizePercentage }}, below 50% threshold."
+
+      # High latency
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(spotify_mcp_tool_duration_seconds_bucket[5m])
+          ) > 2
+        for: 5m
+        labels:
+          severity: warning
+          component: performance
+        annotations:
+          summary: "High latency detected"
+          description: "95th percentile latency is {{ $value }}s, above 2s threshold."
+
+      # Memory usage
+      - alert: HighMemoryUsage
+        expr: spotify_mcp_cache_memory_bytes / (1024 * 1024 * 1024) > 1
+        for: 10m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "High cache memory usage"
+          description: "Cache is using {{ $value | humanize }}GB of memory."
