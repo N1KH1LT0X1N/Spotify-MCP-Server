@@ -61,6 +61,7 @@ all = [
 
 [project.scripts]
 spotify-mcp = "spotify_mcp.server:main"
+spotify-mcp-cli = "spotify_mcp.cli.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
