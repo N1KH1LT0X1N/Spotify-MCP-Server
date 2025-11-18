@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Spotify MCP Server
+  spotify-mcp:
+    build: .
+    container_name: spotify-mcp-server
+    environment:
+      # Caching configuration
+      - CACHE_BACKEND=redis
+      - REDIS_URL=redis://redis:6379/0
+
+      # Spotify credentials (from .env file)
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+      - SPOTIFY_REDIRECT_URI=${SPOTIFY_REDIRECT_URI:-http://127.0.0.1:8888/callback}
+
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    networks:
+      - spotify-network
+    restart: unless-stopped
+    # For MCP stdio communication
+    stdin_open: true
+    tty: true
+
+  # Redis cache
+  redis:
+    image: redis:7-alpine
+    container_name: spotify-mcp-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - spotify-network
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # Optional: Redis Commander (Redis GUI)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: spotify-mcp-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - spotify-network
+    depends_on:
+      - redis
+    restart: unless-stopped
+    profiles:
+      - debug
+
+networks:
+  spotify-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local
