@@ -4,7 +4,7 @@ build-backend = "setuptools.build_backend"
 
 [project]
 name = "spotify-mcp"
-version = "1.1.0"
+version = "1.2.0"
 description = "🎵 Control Spotify through AI - 86 powerful tools with intelligent caching, 10-100x faster performance"
 readme = "README.md"
 requires-python = ">=3.10"
