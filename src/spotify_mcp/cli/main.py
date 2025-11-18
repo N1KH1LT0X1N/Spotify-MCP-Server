@@ -38,7 +38,7 @@ else:
     console = Console()
 
     @click.group()
-    @click.version_option(version='1.1.0', prog_name='spotify-mcp')
+    @click.version_option(version='1.3.0', prog_name='spotify-mcp')
     @click.pass_context
     def cli(ctx):
         """

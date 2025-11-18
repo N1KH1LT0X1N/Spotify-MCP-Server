@@ -61,6 +61,6 @@ def get_current_metrics() -> dict:
 
     return {
         'metrics_enabled': collector.enabled,
-        'server_version': '1.1.0',
+        'server_version': '1.3.0',
         'note': 'Full metrics available at /metrics endpoint'
     }

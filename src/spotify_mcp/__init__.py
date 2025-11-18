@@ -23,4 +23,4 @@ your library—all through natural conversation.
 - User Info (8 tools)
 """
 
-__version__ = "1.0.0"
+__version__ = "1.3.0"

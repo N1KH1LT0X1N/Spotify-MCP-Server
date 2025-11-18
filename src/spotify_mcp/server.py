@@ -650,7 +650,7 @@ def run():
         setup_logging(level=LogLevel.INFO, format_type=log_format)
 
     logger.info("Starting Spotify MCP Server", extra={
-        "version": "1.1.0",
+        "version": "1.3.0",
         "log_level": log_level,
         "log_format": log_format
     })
