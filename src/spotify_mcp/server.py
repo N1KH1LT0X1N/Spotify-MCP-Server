@@ -33,6 +33,14 @@ from mcp.server.stdio import stdio_server
 from spotify_mcp.auth import get_spotify_client
 from spotify_mcp.spotify_client import SpotifyClient
 
+# Optional metrics integration
+try:
+    from spotify_mcp.infrastructure.metrics import get_metrics_collector
+    METRICS_AVAILABLE = True
+except ImportError:
+    METRICS_AVAILABLE = False
+    get_metrics_collector = None
+
 # Import all tools
 from spotify_mcp.tools.playback import (
     play, pause, skip_next, skip_previous, get_current_playback,
@@ -273,27 +281,40 @@ async def list_tools() -> list[Tool]:
 @app.call_tool()
 async def call_tool(name: str, arguments: Any) -> list[TextContent]:
     """Execute a tool with given arguments."""
+    import time
+
+    # Track metrics if available
+    start_time = time.time()
+    status = 'success'
+
+    # Increment active requests
+    if METRICS_AVAILABLE:
+        collector = get_metrics_collector()
+        collector.increment_active_requests()
+
     try:
         # Get the function for this tool
         if name not in TOOL_FUNCTIONS:
             raise ValueError(f"Unknown tool: {name}")
-        
+
         tool_func = TOOL_FUNCTIONS[name]
         client = get_client()
-        
+
         # Call the function with arguments
         if arguments:
             result = tool_func(client, **arguments)
         else:
             result = tool_func(client)
-        
+
         # Format result as JSON
         return [TextContent(
             type="text",
             text=json.dumps(result, indent=2)
         )]
-    
+
     except Exception as e:
+        status = 'error'
+
         # Return error as text
         error_response = {
             "error": str(e),
@@ -304,6 +325,13 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
             type="text",
             text=json.dumps(error_response, indent=2)
         )]
+
+    finally:
+        # Record metrics
+        if METRICS_AVAILABLE:
+            duration = time.time() - start_time
+            collector.record_tool_call(name, duration, status)
+            collector.decrement_active_requests()
 
 
 async def main():

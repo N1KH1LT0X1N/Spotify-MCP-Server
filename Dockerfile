@@ -36,9 +36,11 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application code
 COPY src/ ./src/
 COPY README.md LICENSE ./
+COPY entrypoint.sh ./
 
 # Create non-root user for security
 RUN useradd -m -u 1000 spotify && \
+    chmod +x /app/entrypoint.sh && \
     chown -R spotify:spotify /app
 
 USER spotify
@@ -56,5 +58,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 # Expose port (optional, for future REST API)
 EXPOSE 8000
 
-# Run the server
-CMD ["python", "-m", "spotify_mcp.server"]
+# Run the server with metrics (via entrypoint script)
+CMD ["./entrypoint.sh"]

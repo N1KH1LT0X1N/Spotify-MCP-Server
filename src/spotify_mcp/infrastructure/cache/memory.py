@@ -8,6 +8,15 @@ from typing import Any, Optional
 
 from .interface import CacheBackend
 
+# Optional metrics integration
+try:
+    from ..metrics import track_cache_operation, update_cache_metrics
+    METRICS_AVAILABLE = True
+except ImportError:
+    METRICS_AVAILABLE = False
+    track_cache_operation = lambda *args, **kwargs: None
+    update_cache_metrics = lambda *args, **kwargs: None
+
 
 class MemoryCache(CacheBackend):
     """
@@ -38,6 +47,8 @@ class MemoryCache(CacheBackend):
         with self._lock:
             if key not in self._cache:
                 self._misses += 1
+                if METRICS_AVAILABLE:
+                    track_cache_operation('get', 'miss')
                 return None
 
             entry = self._cache[key]
@@ -46,11 +57,18 @@ class MemoryCache(CacheBackend):
             if entry['expires_at'] < datetime.utcnow():
                 del self._cache[key]
                 self._misses += 1
+                if METRICS_AVAILABLE:
+                    track_cache_operation('get', 'miss')
                 return None
 
             # Move to end (LRU)
             self._cache.move_to_end(key)
             self._hits += 1
+            if METRICS_AVAILABLE:
+                track_cache_operation('get', 'hit')
+                # Periodically update cache stats
+                if self._hits % 100 == 0:  # Every 100 hits
+                    update_cache_metrics('memory', self.get_stats())
             return entry['value']
 
     def set(self, key: str, value: Any, ttl: int = 300) -> None:
@@ -66,6 +84,9 @@ class MemoryCache(CacheBackend):
                 'created_at': datetime.utcnow(),
             }
             self._cache.move_to_end(key)
+
+            if METRICS_AVAILABLE:
+                track_cache_operation('set', 'success')
 
     def delete(self, key: str) -> None:
         """Remove value from cache."""

@@ -10,6 +10,15 @@ except ImportError:
     REDIS_INSTALLED = False
     redis = None
 
+# Optional metrics integration
+try:
+    from ..metrics import track_cache_operation, update_cache_metrics
+    METRICS_AVAILABLE = True
+except ImportError:
+    METRICS_AVAILABLE = False
+    track_cache_operation = lambda *args, **kwargs: None
+    update_cache_metrics = lambda *args, **kwargs: None
+
 from .interface import CacheBackend
 
 
@@ -53,9 +62,17 @@ class RedisCache(CacheBackend):
 
         if value is None:
             self._misses += 1
+            if METRICS_AVAILABLE:
+                track_cache_operation('get', 'miss')
             return None
 
         self._hits += 1
+        if METRICS_AVAILABLE:
+            track_cache_operation('get', 'hit')
+            # Update metrics every 100 hits
+            if self._hits % 100 == 0:
+                update_cache_metrics('redis', self.get_stats())
+
         try:
             return json.loads(value)
         except (json.JSONDecodeError, TypeError):
@@ -71,6 +88,9 @@ class RedisCache(CacheBackend):
             serialized = str(value)
 
         self._client.setex(key, ttl, serialized)
+
+        if METRICS_AVAILABLE:
+            track_cache_operation('set', 'success')
 
     def delete(self, key: str) -> None:
         """Remove value from cache."""
