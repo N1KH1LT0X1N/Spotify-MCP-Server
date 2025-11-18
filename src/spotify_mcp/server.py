@@ -24,6 +24,7 @@ giving users intuitive voice control over their entire music experience.
 import sys
 import json
 import asyncio
+import os
 from pathlib import Path
 from typing import Any, Dict
 from mcp.server import Server
@@ -32,6 +33,18 @@ from mcp.server.stdio import stdio_server
 
 from spotify_mcp.auth import get_spotify_client
 from spotify_mcp.spotify_client import SpotifyClient
+
+# Logging infrastructure
+from spotify_mcp.infrastructure.logging import (
+    get_logger,
+    setup_logging,
+    LogLevel,
+    log_context,
+    set_correlation_id
+)
+
+# Initialize logger for this module
+logger = get_logger(__name__)
 
 # Optional metrics integration
 try:
@@ -282,6 +295,11 @@ async def list_tools() -> list[Tool]:
 async def call_tool(name: str, arguments: Any) -> list[TextContent]:
     """Execute a tool with given arguments."""
     import time
+    import uuid
+
+    # Generate correlation ID for this request
+    correlation_id = str(uuid.uuid4())
+    set_correlation_id(correlation_id)
 
     # Track metrics if available
     start_time = time.time()
@@ -292,46 +310,55 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
         collector = get_metrics_collector()
         collector.increment_active_requests()
 
-    try:
-        # Get the function for this tool
-        if name not in TOOL_FUNCTIONS:
-            raise ValueError(f"Unknown tool: {name}")
+    # Use log context for this tool execution
+    with log_context(tool=name, correlation_id=correlation_id):
+        logger.debug("Tool call started", extra={"arguments": arguments})
 
-        tool_func = TOOL_FUNCTIONS[name]
-        client = get_client()
+        try:
+            # Get the function for this tool
+            if name not in TOOL_FUNCTIONS:
+                logger.error("Unknown tool requested", extra={"tool": name})
+                raise ValueError(f"Unknown tool: {name}")
 
-        # Call the function with arguments
-        if arguments:
-            result = tool_func(client, **arguments)
-        else:
-            result = tool_func(client)
+            tool_func = TOOL_FUNCTIONS[name]
+            client = get_client()
 
-        # Format result as JSON
-        return [TextContent(
-            type="text",
-            text=json.dumps(result, indent=2)
-        )]
+            # Call the function with arguments
+            if arguments:
+                result = tool_func(client, **arguments)
+            else:
+                result = tool_func(client)
 
-    except Exception as e:
-        status = 'error'
+            logger.info("Tool call completed successfully")
 
-        # Return error as text
-        error_response = {
-            "error": str(e),
-            "tool": name,
-            "arguments": arguments
-        }
-        return [TextContent(
-            type="text",
-            text=json.dumps(error_response, indent=2)
-        )]
+            # Format result as JSON
+            return [TextContent(
+                type="text",
+                text=json.dumps(result, indent=2)
+            )]
 
-    finally:
-        # Record metrics
-        if METRICS_AVAILABLE:
-            duration = time.time() - start_time
-            collector.record_tool_call(name, duration, status)
-            collector.decrement_active_requests()
+        except Exception as e:
+            status = 'error'
+            logger.error("Tool call failed", exc_info=True, extra={"error": str(e)})
+
+            # Return error as text
+            error_response = {
+                "error": str(e),
+                "tool": name,
+                "arguments": arguments
+            }
+            return [TextContent(
+                type="text",
+                text=json.dumps(error_response, indent=2)
+            )]
+
+        finally:
+            # Record metrics
+            if METRICS_AVAILABLE:
+                duration = time.time() - start_time
+                collector.record_tool_call(name, duration, status)
+                collector.decrement_active_requests()
+                logger.debug("Tool metrics recorded", extra={"duration_ms": duration * 1000, "status": status})
 
 
 async def main():
@@ -346,11 +373,33 @@ async def main():
 
 def run():
     """Run the server (sync wrapper)."""
+    # Setup logging based on environment
+    log_level = os.getenv("LOG_LEVEL", "INFO")
+    log_format = os.getenv("LOG_FORMAT", "human")  # "human" or "json"
+
+    try:
+        setup_logging(
+            level=LogLevel[log_level],
+            format_type=log_format
+        )
+    except KeyError:
+        # Fallback to INFO if invalid log level
+        setup_logging(level=LogLevel.INFO, format_type=log_format)
+
+    logger.info("Starting Spotify MCP Server", extra={
+        "version": "1.1.0",
+        "log_level": log_level,
+        "log_format": log_format
+    })
+
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\nShutting down Spotify MCP server...")
+        logger.info("Received shutdown signal, stopping server...")
         sys.exit(0)
+    except Exception as e:
+        logger.critical("Server crashed", exc_info=True)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
