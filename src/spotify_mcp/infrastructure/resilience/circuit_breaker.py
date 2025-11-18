@@ -10,6 +10,13 @@ from spotify_mcp.infrastructure.logging import get_logger
 
 logger = get_logger(__name__)
 
+# Optional metrics integration
+try:
+    from spotify_mcp.infrastructure.metrics import get_metrics_collector
+    METRICS_AVAILABLE = True
+except ImportError:
+    METRICS_AVAILABLE = False
+
 
 class CircuitState(Enum):
     """Circuit breaker states."""
@@ -68,6 +75,11 @@ class CircuitBreaker:
         self.total_successes = 0
         self.total_rejections = 0
 
+        # Initialize metrics if available
+        if METRICS_AVAILABLE:
+            collector = get_metrics_collector()
+            collector.update_circuit_breaker_state(self.name, self.state.value)
+
     async def call(self, func: Callable, *args, **kwargs) -> Any:
         """
         Call function through circuit breaker.
@@ -93,6 +105,11 @@ class CircuitBreaker:
                 logger.info(f"Circuit breaker {self.name} entering HALF_OPEN state")
                 self.state = CircuitState.HALF_OPEN
                 self.last_state_change = datetime.utcnow()
+
+                # Update metrics
+                if METRICS_AVAILABLE:
+                    collector = get_metrics_collector()
+                    collector.update_circuit_breaker_state(self.name, self.state.value)
             else:
                 self.total_rejections += 1
                 raise CircuitBreakerOpenError(
@@ -129,6 +146,11 @@ class CircuitBreaker:
         self.total_successes += 1
         self.failure_count = 0
 
+        # Record success metric
+        if METRICS_AVAILABLE:
+            collector = get_metrics_collector()
+            collector.record_circuit_breaker_success(self.name)
+
         if self.state == CircuitState.HALF_OPEN:
             self.success_count += 1
 
@@ -138,17 +160,32 @@ class CircuitBreaker:
                 self.success_count = 0
                 self.last_state_change = datetime.utcnow()
 
+                # Update metrics
+                if METRICS_AVAILABLE:
+                    collector = get_metrics_collector()
+                    collector.update_circuit_breaker_state(self.name, self.state.value)
+
     def _on_failure(self) -> None:
         """Handle failed call."""
         self.total_failures += 1
         self.failure_count += 1
         self.last_failure_time = datetime.utcnow()
 
+        # Record failure metric
+        if METRICS_AVAILABLE:
+            collector = get_metrics_collector()
+            collector.record_circuit_breaker_failure(self.name)
+
         if self.state == CircuitState.HALF_OPEN:
             logger.info(f"Circuit breaker {self.name} reopening after failed recovery attempt")
             self.state = CircuitState.OPEN
             self.success_count = 0
             self.last_state_change = datetime.utcnow()
+
+            # Update metrics
+            if METRICS_AVAILABLE:
+                collector = get_metrics_collector()
+                collector.update_circuit_breaker_state(self.name, self.state.value)
 
         elif self.state == CircuitState.CLOSED:
             if self.failure_count >= self.failure_threshold:
@@ -157,6 +194,11 @@ class CircuitBreaker:
                 )
                 self.state = CircuitState.OPEN
                 self.last_state_change = datetime.utcnow()
+
+                # Update metrics
+                if METRICS_AVAILABLE:
+                    collector = get_metrics_collector()
+                    collector.update_circuit_breaker_state(self.name, self.state.value)
 
     def _should_attempt_reset(self) -> bool:
         """Check if enough time has passed to attempt recovery."""

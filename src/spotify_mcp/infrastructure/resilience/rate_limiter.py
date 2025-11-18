@@ -9,6 +9,13 @@ from spotify_mcp.infrastructure.logging import get_logger
 
 logger = get_logger(__name__)
 
+# Optional metrics integration
+try:
+    from spotify_mcp.infrastructure.metrics import get_metrics_collector
+    METRICS_AVAILABLE = True
+except ImportError:
+    METRICS_AVAILABLE = False
+
 
 class TokenBucket:
     """
@@ -176,12 +183,12 @@ class RateLimiter:
             refill_rate=requests_per_hour / 3600
         )
 
-    async def acquire(self) -> dict:
+    async def acquire(self) -> float:
         """
         Acquire rate limit permission (wait if necessary).
 
         Returns:
-            Dictionary with wait times for each tier
+            Total wait time in seconds
         """
         wait_times = {
             "per_second": await self.per_second.acquire(),
@@ -191,16 +198,26 @@ class RateLimiter:
 
         total_wait = sum(wait_times.values())
 
+        # Record metrics
+        if METRICS_AVAILABLE:
+            collector = get_metrics_collector()
+
+            # Update remaining tokens for each tier
+            collector.update_rate_limit('per_second', int(self.per_second.tokens))
+            collector.update_rate_limit('per_minute', int(self.per_minute.tokens))
+            collector.update_rate_limit('per_hour', int(self.per_hour.tokens))
+
+            # Record wait time if throttled
+            if total_wait > 0:
+                collector.record_rate_limit_wait(total_wait)
+
         if total_wait > 0:
             logger.info(
                 f"Rate limited: total wait {total_wait:.2f}s",
                 extra=wait_times
             )
 
-        return {
-            "wait_times": wait_times,
-            "total_wait_seconds": total_wait
-        }
+        return total_wait
 
     def try_acquire(self) -> bool:
         """

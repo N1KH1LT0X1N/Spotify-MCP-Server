@@ -54,6 +54,31 @@ except ImportError:
     METRICS_AVAILABLE = False
     get_metrics_collector = None
 
+# Resilience infrastructure
+try:
+    from spotify_mcp.infrastructure.resilience import (
+        get_circuit_breaker_registry,
+        get_rate_limiter,
+        get_health_system,
+        CircuitBreakerOpenError
+    )
+    RESILIENCE_AVAILABLE = True
+except ImportError:
+    RESILIENCE_AVAILABLE = False
+    logger.warning("Resilience infrastructure not available")
+
+# Cache infrastructure
+try:
+    from spotify_mcp.infrastructure.cache import (
+        get_cache_invalidator,
+        get_cache_warmer,
+        warm_cache_on_startup
+    )
+    CACHE_ENHANCEMENTS_AVAILABLE = True
+except ImportError:
+    CACHE_ENHANCEMENTS_AVAILABLE = False
+    logger.warning("Cache enhancements not available")
+
 # Import all tools
 from spotify_mcp.tools.playback import (
     play, pause, skip_next, skip_previous, get_current_playback,
@@ -126,6 +151,55 @@ app = Server("spotify")
 
 # Global Spotify client (initialized on first use)
 _spotify_client: SpotifyClient = None
+_initialized: bool = False
+
+
+async def initialize_infrastructure():
+    """Initialize all infrastructure components on startup."""
+    global _initialized
+
+    if _initialized:
+        return
+
+    logger.info("Initializing infrastructure components...")
+
+    # Initialize resilience components
+    if RESILIENCE_AVAILABLE:
+        try:
+            # Setup circuit breaker for Spotify API
+            registry = get_circuit_breaker_registry()
+            registry.get_or_create(
+                name="spotify_api",
+                failure_threshold=5,
+                recovery_timeout=60,
+                success_threshold=2,
+                timeout=30.0
+            )
+            logger.info("Circuit breaker initialized")
+
+            # Rate limiter is already initialized as singleton
+            logger.info("Rate limiter initialized")
+
+            # Setup health checks
+            health_system = get_health_system()
+            # Health checks will be registered when components are available
+            logger.info("Health check system initialized")
+
+        except Exception as e:
+            logger.error(f"Failed to initialize resilience infrastructure: {e}")
+
+    # Warm cache on startup
+    if CACHE_ENHANCEMENTS_AVAILABLE:
+        try:
+            client = get_client()
+            # Cache warming will happen asynchronously
+            asyncio.create_task(warm_cache_on_startup(client.sp, None))
+            logger.info("Cache warming initiated")
+        except Exception as e:
+            logger.error(f"Failed to warm cache: {e}")
+
+    _initialized = True
+    logger.info("Infrastructure initialization complete")
 
 
 def get_client() -> SpotifyClient:
@@ -297,6 +371,9 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
     import time
     import uuid
 
+    # Ensure infrastructure is initialized
+    await initialize_infrastructure()
+
     # Generate correlation ID for this request
     correlation_id = str(uuid.uuid4())
     set_correlation_id(correlation_id)
@@ -315,6 +392,13 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
         logger.debug("Tool call started", extra={"arguments": arguments})
 
         try:
+            # Rate limiting
+            if RESILIENCE_AVAILABLE:
+                rate_limiter = get_rate_limiter()
+                wait_time = await rate_limiter.acquire()
+                if wait_time > 0:
+                    logger.info(f"Rate limited, waited {wait_time:.2f}s")
+
             # Get the function for this tool
             if name not in TOOL_FUNCTIONS:
                 logger.error("Unknown tool requested", extra={"tool": name})
@@ -323,11 +407,31 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
             tool_func = TOOL_FUNCTIONS[name]
             client = get_client()
 
-            # Call the function with arguments
-            if arguments:
-                result = tool_func(client, **arguments)
+            # Execute through circuit breaker if available
+            if RESILIENCE_AVAILABLE:
+                circuit_breaker = get_circuit_breaker_registry().get_or_create("spotify_api")
+                try:
+                    # Call the function with arguments through circuit breaker
+                    async def execute_tool():
+                        if arguments:
+                            return tool_func(client, **arguments)
+                        else:
+                            return tool_func(client)
+
+                    result = await circuit_breaker.call(execute_tool)
+                except CircuitBreakerOpenError as e:
+                    logger.warning("Circuit breaker is open", extra={"circuit": "spotify_api"})
+                    raise Exception("Spotify API is temporarily unavailable (circuit breaker open)")
             else:
-                result = tool_func(client)
+                # Call without circuit breaker
+                if arguments:
+                    result = tool_func(client, **arguments)
+                else:
+                    result = tool_func(client)
+
+            # Cache invalidation for mutation operations
+            if CACHE_ENHANCEMENTS_AVAILABLE:
+                await handle_cache_invalidation(name, arguments, result)
 
             logger.info("Tool call completed successfully")
 
@@ -361,8 +465,69 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
                 logger.debug("Tool metrics recorded", extra={"duration_ms": duration * 1000, "status": status})
 
 
+async def handle_cache_invalidation(tool_name: str, arguments: Dict[str, Any], result: Any):
+    """Handle cache invalidation after mutation operations."""
+    if not CACHE_ENHANCEMENTS_AVAILABLE:
+        return
+
+    invalidator = get_cache_invalidator()
+
+    # Map tool names to cache invalidation operations
+    mutation_handlers = {
+        # Playlist mutations
+        "add_tracks_to_playlist": lambda: invalidator.invalidate_playlist(arguments.get("playlist_id")),
+        "remove_tracks_from_playlist": lambda: invalidator.invalidate_playlist(arguments.get("playlist_id")),
+        "create_playlist": lambda: invalidator.invalidate_on_mutation("playlist", None, "create"),
+        "change_playlist_details": lambda: invalidator.invalidate_playlist(arguments.get("playlist_id")),
+        "update_playlist_items": lambda: invalidator.invalidate_playlist(arguments.get("playlist_id")),
+        "follow_playlist": lambda: invalidator.invalidate_on_mutation("playlist", arguments.get("playlist_id"), "follow"),
+        "unfollow_playlist": lambda: invalidator.invalidate_on_mutation("playlist", arguments.get("playlist_id"), "unfollow"),
+
+        # Library mutations
+        "save_tracks": lambda: invalidator.invalidate_library(),
+        "remove_saved_tracks": lambda: invalidator.invalidate_library(),
+        "save_albums": lambda: invalidator.invalidate_on_mutation("album", None, "save"),
+        "remove_saved_albums": lambda: invalidator.invalidate_on_mutation("album", None, "remove"),
+        "save_shows": lambda: invalidator.invalidate_on_mutation("show", None, "save"),
+        "remove_saved_shows": lambda: invalidator.invalidate_on_mutation("show", None, "remove"),
+        "save_episodes": lambda: invalidator.invalidate_on_mutation("episode", None, "save"),
+        "remove_saved_episodes": lambda: invalidator.invalidate_on_mutation("episode", None, "remove"),
+        "save_audiobooks": lambda: invalidator.invalidate_on_mutation("audiobook", None, "save"),
+        "remove_saved_audiobooks": lambda: invalidator.invalidate_on_mutation("audiobook", None, "remove"),
+
+        # Playback mutations
+        "play": lambda: invalidator.invalidate_playback(),
+        "pause": lambda: invalidator.invalidate_playback(),
+        "skip_next": lambda: invalidator.invalidate_playback(),
+        "skip_previous": lambda: invalidator.invalidate_playback(),
+        "transfer_playback": lambda: invalidator.invalidate_devices(),
+        "set_volume": lambda: invalidator.invalidate_playback(),
+        "set_shuffle": lambda: invalidator.invalidate_playback(),
+        "set_repeat": lambda: invalidator.invalidate_playback(),
+        "seek_to_position": lambda: invalidator.invalidate_playback(),
+
+        # Queue mutations
+        "add_to_queue": lambda: invalidator.invalidate_queue(),
+
+        # Follow mutations
+        "follow_artists_or_users": lambda: invalidator.invalidate_on_mutation("artist", None, "follow"),
+        "unfollow_artists_or_users": lambda: invalidator.invalidate_on_mutation("artist", None, "unfollow"),
+    }
+
+    # Execute invalidation if this is a mutation operation
+    if tool_name in mutation_handlers:
+        try:
+            await mutation_handlers[tool_name]()
+            logger.debug(f"Cache invalidated for {tool_name}")
+        except Exception as e:
+            logger.error(f"Failed to invalidate cache for {tool_name}: {e}")
+
+
 async def main():
     """Main entry point for the server."""
+    # Initialize infrastructure on server start
+    await initialize_infrastructure()
+
     async with stdio_server() as (read_stream, write_stream):
         await app.run(
             read_stream,
