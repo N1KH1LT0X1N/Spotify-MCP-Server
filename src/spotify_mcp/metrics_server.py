@@ -22,11 +22,17 @@ try:
     PROMETHEUS_AVAILABLE = True
 except ImportError:
     PROMETHEUS_AVAILABLE = False
-    print("Warning: prometheus-client not installed. Install with: pip install prometheus-client")
-    sys.exit(1)
+    generate_latest = None
+    CONTENT_TYPE_LATEST = "text/plain"
 
-# Import metrics collector to ensure singleton is initialized
-from spotify_mcp.infrastructure.metrics import get_metrics_collector
+
+def _get_metrics_collector():
+    """Lazy import of metrics collector to avoid import errors."""
+    try:
+        from spotify_mcp.infrastructure.metrics import get_metrics_collector
+        return get_metrics_collector()
+    except ImportError:
+        return None
 
 
 class MetricsHandler(BaseHTTPRequestHandler):
@@ -35,6 +41,13 @@ class MetricsHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handle GET requests."""
         if self.path == '/metrics':
+            if not PROMETHEUS_AVAILABLE:
+                self.send_response(503)
+                self.send_header('Content-Type', 'text/plain')
+                self.end_headers()
+                self.wfile.write(b'Metrics not available. Install prometheus-client.')
+                return
+
             self.send_response(200)
             self.send_header('Content-Type', CONTENT_TYPE_LATEST)
             self.end_headers()
@@ -67,11 +80,17 @@ def run_server(port: int = 8000):
     Args:
         port: Port to listen on (default: 8000)
     """
-    # Initialize metrics collector
-    collector = get_metrics_collector()
-
-    if not collector.enabled:
+    # Check if prometheus is available
+    if not PROMETHEUS_AVAILABLE:
         print("Error: Prometheus metrics are not enabled")
+        print("Install prometheus-client: pip install prometheus-client")
+        sys.exit(1)
+
+    # Initialize metrics collector
+    collector = _get_metrics_collector()
+
+    if not collector or not collector.enabled:
+        print("Error: Metrics collector not available")
         print("Install prometheus-client: pip install prometheus-client")
         sys.exit(1)
 
