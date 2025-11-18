@@ -4,7 +4,7 @@ A production-ready Model Context Protocol server that enables AI assistants
 to seamlessly control Spotify. Natural language commands become API calls,
 giving users intuitive voice control over their entire music experience.
 
-85 tools organized by capability:
+86 tools organized by capability:
 - Playback: Control your music (play, pause, skip, volume, devices)
 - Discovery: Find and explore music (search, recommendations)
 - Library: Manage your saved content (tracks, albums, audiobooks)
@@ -19,6 +19,23 @@ giving users intuitive voice control over their entire music experience.
 - Tracks: Get track details and audio analysis
 - Genres: Discover music by genre
 - Markets: Check Spotify availability by country
+
+8 resources for efficient data access:
+- Current playback state
+- User playlists
+- Recently played tracks
+- User profile
+- Available devices
+- Saved tracks/albums
+- Playback queue
+
+8 prompts for common interactions:
+- Discover new music
+- Create playlists
+- Analyze listening habits
+- Control playback
+- Explore artists
+- Find similar music
 """
 
 import sys
@@ -28,11 +45,13 @@ import os
 from pathlib import Path
 from typing import Any, Dict
 from mcp.server import Server
-from mcp.types import Tool, TextContent
+from mcp.types import Tool, TextContent, Resource, Prompt, PromptMessage
 from mcp.server.stdio import stdio_server
 
 from spotify_mcp.auth import get_spotify_client
 from spotify_mcp.spotify_client import SpotifyClient
+from spotify_mcp.resources import get_resources
+from spotify_mcp.prompts import SpotifyPrompts
 
 # Logging infrastructure
 from spotify_mcp.infrastructure.logging import (
@@ -354,7 +373,7 @@ async def list_tools() -> list[Tool]:
         SHOW_TOOLS +
         TRACK_TOOLS
     )
-    
+
     return [
         Tool(
             name=tool["name"],
@@ -363,6 +382,85 @@ async def list_tools() -> list[Tool]:
         )
         for tool in all_tools
     ]
+
+
+@app.list_resources()
+async def list_resources() -> list[Resource]:
+    """List all available resources."""
+    client = get_client()
+    resources_handler = get_resources(client)
+    resource_defs = resources_handler.list_all()
+
+    return [
+        Resource(
+            uri=res["uri"],
+            name=res["name"],
+            description=res["description"],
+            mimeType=res.get("mimeType", "application/json")
+        )
+        for res in resource_defs
+    ]
+
+
+@app.read_resource()
+async def read_resource(uri: str) -> str:
+    """Read a resource by URI."""
+    client = get_client()
+    resources_handler = get_resources(client)
+
+    try:
+        data = await resources_handler.read(uri)
+        return json.dumps(data, indent=2)
+    except Exception as e:
+        logger.error(f"Failed to read resource {uri}: {e}", exc_info=True)
+        return json.dumps({
+            "error": str(e),
+            "uri": uri
+        }, indent=2)
+
+
+@app.list_prompts()
+async def list_prompts() -> list[Prompt]:
+    """List all available prompts."""
+    prompt_defs = SpotifyPrompts.list_all()
+
+    return [
+        Prompt(
+            name=p["name"],
+            description=p["description"],
+            arguments=[
+                {
+                    "name": arg["name"],
+                    "description": arg["description"],
+                    "required": arg.get("required", False)
+                }
+                for arg in p.get("arguments", [])
+            ] if p.get("arguments") else None
+        )
+        for p in prompt_defs
+    ]
+
+
+@app.get_prompt()
+async def get_prompt(name: str, arguments: Dict[str, str] = None) -> Dict[str, Any]:
+    """Get a prompt by name with optional arguments."""
+    try:
+        prompt_data = SpotifyPrompts.get(name, arguments)
+        return prompt_data
+    except Exception as e:
+        logger.error(f"Failed to get prompt {name}: {e}", exc_info=True)
+        return {
+            "description": f"Error loading prompt: {name}",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": {
+                        "type": "text",
+                        "text": f"Error: {str(e)}"
+                    }
+                }
+            ]
+        }
 
 
 @app.call_tool()
