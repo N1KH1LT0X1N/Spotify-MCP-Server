@@ -12,6 +12,8 @@ from .interface import CacheBackend
 from .memory import MemoryCache
 from .manager import CacheManager, get_cache_manager
 from .strategies import CacheStrategy, CacheKeyGenerator
+from .invalidation import CacheInvalidator, get_cache_invalidator
+from .warming import CacheWarmer, get_cache_warmer, warm_cache_on_startup
 
 # Try to import Redis cache if available
 try:
@@ -29,5 +31,10 @@ __all__ = [
     'get_cache_manager',
     'CacheStrategy',
     'CacheKeyGenerator',
+    'CacheInvalidator',
+    'get_cache_invalidator',
+    'CacheWarmer',
+    'get_cache_warmer',
+    'warm_cache_on_startup',
     'REDIS_AVAILABLE',
 ]
