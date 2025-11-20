@@ -3,7 +3,7 @@
 import fnmatch
 import threading
 from collections import OrderedDict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 from .interface import CacheBackend
@@ -54,7 +54,7 @@ class MemoryCache(CacheBackend):
             entry = self._cache[key]
 
             # Check expiration
-            if entry['expires_at'] < datetime.utcnow():
+            if entry['expires_at'] < datetime.now(timezone.utc):
                 del self._cache[key]
                 self._misses += 1
                 if METRICS_AVAILABLE:
@@ -80,8 +80,8 @@ class MemoryCache(CacheBackend):
 
             self._cache[key] = {
                 'value': value,
-                'expires_at': datetime.utcnow() + timedelta(seconds=ttl),
-                'created_at': datetime.utcnow(),
+                'expires_at': datetime.now(timezone.utc) + timedelta(seconds=ttl),
+                'created_at': datetime.now(timezone.utc),
             }
             self._cache.move_to_end(key)
 

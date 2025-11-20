@@ -31,13 +31,13 @@ def test_logging_imports():
         )
         print("✓ All logging imports successful")
         print("\n✅ Logging import tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Logging import test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_logging_setup():
@@ -60,13 +60,13 @@ def test_logging_setup():
         print("✓ Logger instance created")
 
         print("\n✅ Logging setup tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Logging setup test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_correlation_ids():
@@ -93,13 +93,13 @@ def test_correlation_ids():
         print("✓ Message logged with correlation ID")
 
         print("\n✅ Correlation ID tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Correlation ID test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_log_context():
@@ -138,13 +138,13 @@ def test_log_context():
         print("✓ Context manager cleanup verified")
 
         print("\n✅ Log context tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Log context test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_log_levels():
@@ -170,13 +170,13 @@ def test_log_levels():
 
         print("✓ All log levels working")
         print("\n✅ Log level tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Log level test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_json_output():
@@ -227,13 +227,13 @@ def test_json_output():
         print(f"✓ Sample JSON log: {output.strip()[:100]}...")
 
         print("\n✅ JSON output tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ JSON output test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_exception_logging():
@@ -258,13 +258,13 @@ def test_exception_logging():
 
         print("✓ Exception logged successfully")
         print("\n✅ Exception logging tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Exception logging test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 if __name__ == "__main__":

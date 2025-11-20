@@ -46,20 +46,20 @@ def test_config_imports():
         )
         print("✓ All config imports successful")
         print("\n✅ Config import tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Config import test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_default_settings():
     """Test default settings loading."""
     if not PYDANTIC_AVAILABLE:
         print("⚠ Skipping test (pydantic not installed)\n")
-        return True
+        pass  # Test passes
 
     print("Testing default settings...")
 
@@ -79,13 +79,13 @@ def test_default_settings():
 
         print("✓ Default settings loaded correctly")
         print("\n✅ Default settings tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Default settings test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_env_loading():
@@ -140,13 +140,13 @@ def test_env_loading():
             print("✓ General settings loaded from env")
 
         print("\n✅ Environment loading tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Environment loading test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_validation():
@@ -166,7 +166,7 @@ def test_validation():
         try:
             CacheConfig(backend="invalid")
             print("✗ Invalid cache backend should have been rejected")
-            return False
+            pytest.fail("Test assertion failed")
         except ValidationError:
             print("✓ Invalid cache backend rejected")
 
@@ -179,18 +179,18 @@ def test_validation():
         try:
             LoggingConfig(level="TRACE")
             print("✗ Invalid log level should have been rejected")
-            return False
+            pytest.fail("Test assertion failed")
         except ValidationError:
             print("✓ Invalid log level rejected")
 
         print("\n✅ Validation tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Validation test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_type_safety():
@@ -217,13 +217,13 @@ def test_type_safety():
         print("✓ Property methods working")
 
         print("\n✅ Type safety tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Type safety test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_singleton_pattern():
@@ -255,13 +255,13 @@ def test_singleton_pattern():
         print("✓ Cache clear working")
 
         print("\n✅ Singleton pattern tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Singleton pattern test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_sub_configs():
@@ -296,13 +296,13 @@ def test_sub_configs():
             print("✓ LoggingConfig.from_env() working")
 
         print("\n✅ Sub-configuration tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Sub-configuration test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 if __name__ == "__main__":

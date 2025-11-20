@@ -23,20 +23,20 @@ def test_server_initialization():
             print("✅ main() function exists")
         else:
             print("❌ main() function missing")
-            return False
+            pytest.fail("Test assertion failed")
         
         if hasattr(server, 'TOOL_FUNCTIONS'):
             print(f"✅ TOOL_FUNCTIONS exists with {len(server.TOOL_FUNCTIONS)} functions")
         else:
             print("❌ TOOL_FUNCTIONS missing")
-            return False
+            pytest.fail("Test assertion failed")
         
-        return True
+        pass  # Test passes
     except Exception as e:
         print(f"❌ Server initialization failed: {e}")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_list_tools():
@@ -117,19 +117,19 @@ def test_list_tools():
         
         if len(all_tools) == 86 and all_present:
             print("\n✅ All 86 tools available and key tools present!")
-            return True
+            pass  # Test passes
         elif len(all_tools) == 86:
             print(f"\n⚠️  86 tools found but some key tools missing")
-            return False
+            pytest.fail("Test assertion failed")
         else:
             print(f"\n❌ Expected 86 tools, got {len(all_tools)}")
-            return False
+            pytest.fail("Test assertion failed")
             
     except Exception as e:
         print(f"❌ List tools test failed: {e}")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_tool_details():
@@ -178,16 +178,16 @@ def test_tool_details():
         
         if all_valid:
             print("\n✅ Tool details are complete!")
-            return True
+            pass  # Test passes
         else:
             print("\n❌ Some tools have incomplete details")
-            return False
+            pytest.fail("Test assertion failed")
         
     except Exception as e:
         print(f"❌ Tool details test failed: {e}")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def main():

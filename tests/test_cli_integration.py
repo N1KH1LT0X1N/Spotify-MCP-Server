@@ -52,13 +52,13 @@ def test_cli_imports():
             print("⚠ Skipping command module tests (dependencies not installed)")
 
         print("\n✅ CLI import tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ CLI import test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_cli_utilities():
@@ -75,7 +75,7 @@ def test_cli_utilities():
             deps_available = False
             print("⚠ Skipping utility tests (click/rich not installed)")
             print("\n✅ CLI utility tests skipped!\n")
-            return True
+            pass  # Test passes
 
         from spotify_mcp.cli.utils import format_duration, format_track
 
@@ -97,13 +97,13 @@ def test_cli_utilities():
         print("✓ Track formatting works")
 
         print("\n✅ CLI utility tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ CLI utility test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_cli_entry_point():
@@ -119,13 +119,13 @@ def test_cli_entry_point():
         print("✓ CLI object is available")
 
         print("\n✅ CLI entry point tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ CLI entry point test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 if __name__ == "__main__":

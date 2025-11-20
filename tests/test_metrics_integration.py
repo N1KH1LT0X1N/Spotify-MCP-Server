@@ -33,13 +33,13 @@ def test_metrics_imports():
             print("⚠ prometheus-client not installed (graceful degradation active)")
 
         print("\n✅ Metrics import tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Metrics import test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_metrics_collector():
@@ -67,13 +67,13 @@ def test_metrics_collector():
         print("✓ Active requests tracking works")
 
         print("\n✅ Metrics collector tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Metrics collector test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_cache_with_metrics():
@@ -103,13 +103,13 @@ def test_cache_with_metrics():
         print(f"✓ Cache stats: {stats}")
 
         print("\n✅ Cache with metrics tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Cache with metrics test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 def test_metrics_endpoint():
@@ -132,7 +132,7 @@ def test_metrics_endpoint():
             assert 'Metrics not available' in content_str
             print("✓ Metrics endpoint returns graceful degradation message")
             print("\n✅ Metrics endpoint tests passed (graceful degradation)!\n")
-            return True
+            pass  # Test passes
 
         # prometheus-client is installed, test full functionality
         content, content_type = metrics_endpoint()
@@ -147,13 +147,13 @@ def test_metrics_endpoint():
         print("✓ Metrics endpoint contains spotify_mcp metrics")
 
         print("\n✅ Metrics endpoint tests passed!\n")
-        return True
+        pass  # Test passes
 
     except Exception as e:
         print(f"\n❌ Metrics endpoint test failed: {e}\n")
         import traceback
         traceback.print_exc()
-        return False
+        pytest.fail("Test assertion failed")
 
 
 if __name__ == "__main__":
