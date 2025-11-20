@@ -1,7 +1,9 @@
 """Verify all Spotify MCP tools are properly registered."""
 
 import sys
-sys.path.insert(0, 'src')
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from spotify_mcp.server import TOOL_FUNCTIONS
 from spotify_mcp.tools.playback import PLAYBACK_TOOLS

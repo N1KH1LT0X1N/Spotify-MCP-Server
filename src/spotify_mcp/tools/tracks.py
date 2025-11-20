@@ -106,6 +106,9 @@ def get_tracks_audio_features(client: SpotifyClient, track_ids: List[str]) -> Di
     
     Returns:
         List of audio features for each track
+    
+    Note:
+        Some tracks may not have audio features available. They will be None in results.
     """
     if not track_ids:
         raise ValueError("track_ids cannot be empty")
@@ -113,10 +116,30 @@ def get_tracks_audio_features(client: SpotifyClient, track_ids: List[str]) -> Di
     if len(track_ids) > 100:
         raise ValueError("Cannot retrieve audio features for more than 100 tracks at once")
     
-    # Extract IDs from URIs if needed
-    track_ids = [t.split(":")[-1] if ":" in t else t for t in track_ids]
+    # Extract IDs from URIs if needed and validate format
+    cleaned_ids = []
+    for track_id in track_ids:
+        # Extract ID from URI (spotify:track:ID) or URL
+        if ":" in track_id:
+            track_id = track_id.split(":")[-1]
+        elif "/" in track_id:
+            track_id = track_id.split("/")[-1].split("?")[0]
+        
+        # Basic validation - Spotify IDs are 22 characters
+        if len(track_id) != 22:
+            raise ValueError(f"Invalid track ID format: {track_id}. Expected 22-character Spotify ID.")
+        
+        cleaned_ids.append(track_id)
     
-    results = client.audio_features(track_ids=track_ids)
+    # Get audio features (returns list of feature objects)
+    try:
+        results = client.audio_features(tracks=cleaned_ids)
+    except Exception as e:
+        # Provide more helpful error message
+        raise Exception(
+            f"Failed to get audio features: {str(e)}. "
+            "Make sure the track IDs are valid and the tracks are available on Spotify."
+        )
     
     features = []
     for feature in results:

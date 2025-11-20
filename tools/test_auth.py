@@ -8,9 +8,9 @@ import sys
 from pathlib import Path
 
 # Add src to path so we can import our modules
-sys.path.insert(0, str(Path(__file__).parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from spotify_mcp.auth import SpotifyAuthManager
+from spotify_mcp.auth import SpotifyAuthManager, get_spotify_client
 
 
 def main():
@@ -31,7 +31,7 @@ def main():
             print(">> Already authenticated!\n")
             
             # Get user info to verify it works
-            sp = auth.get_spotify_client()
+            sp = get_spotify_client()
             user = sp.current_user()
             
             print("Logged in as:")
@@ -60,7 +60,7 @@ def main():
             input("Press Enter when ready to open browser...")
             
             # Get authenticated client (will trigger OAuth flow)
-            sp = auth.get_spotify_client()
+            sp = get_spotify_client()
             
             # Verify by getting user info
             user = sp.current_user()

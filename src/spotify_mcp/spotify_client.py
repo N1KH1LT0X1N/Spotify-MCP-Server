@@ -62,7 +62,14 @@ class SpotifyClient:
                         "This operation requires Spotify Premium. Playback control features "
                         "are only available to Premium subscribers."
                     )
-
+                
+                # General 403 Forbidden - might be regional restriction or invalid content
+                elif e.http_status == 403:
+                    raise Exception(
+                        f"Access forbidden: {e.msg}. This could be due to regional restrictions, "
+                        "unavailable content, or insufficient permissions."
+                    )
+                
                 # Bad request - usually invalid parameters
                 elif e.http_status == 400:
                     raise Exception(f"Invalid request: {e.msg}")
