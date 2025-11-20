@@ -13,7 +13,7 @@
 
 **Transform your AI assistant into a Spotify DJ.** Natural language commands become instant music control—search songs, manage playlists, control playback, discover new artists, and explore your entire library through simple conversation.
 
-> **Production-ready** with 86 tools (100% Spotify API coverage), comprehensive docs, and battle-tested reliability. Setup in 5 minutes. Issues? Check [troubleshooting](docs/setup/troubleshooting.md) for instant solutions.
+> **Enterprise-ready** with 86 tools (100% Spotify API coverage), 8 resources, 8 prompts, production infrastructure, and comprehensive docs. Setup in 5 minutes. Issues? Check [troubleshooting](docs/setup/troubleshooting.md) for instant solutions.
 
 ## ⚡ Quick Start
 
@@ -23,7 +23,9 @@
 
 **Prefer step-by-step?** → [docs/setup/GET_STARTED.md](docs/setup/GET_STARTED.md) 📖
 
-**All documentation:** → [docs/](docs/README.md) 📚
+**All documentation:** → [docs/INDEX.md](docs/INDEX.md) 📚
+
+**Repository structure:** → [docs/REPOSITORY_STRUCTURE.md](docs/REPOSITORY_STRUCTURE.md) 🗂️
 
 ## 🎯 What You Can Do
 
@@ -51,29 +53,47 @@ Just talk naturally to your AI:
 
 ## ✨ Features
 
-### 🚀 v1.1 - Performance & Observability
+### 🚀 v1.3.0 - Enterprise Infrastructure
+
+**🏗️ Production-Grade Reliability**
+- Circuit breakers and rate limiting for fault tolerance
+- Exponential backoff retry with jitter
+- Health checks and graceful degradation
+- Comprehensive error handling with 403 API quota fix
+
+**📊 Observability & Monitoring**
+- Prometheus metrics for tool calls, cache, API usage, latency
+- Grafana dashboards for real-time visualization
+- Structured JSON logging with correlation IDs
+- Performance tracking and alerting
+
+**🎨 Beautiful CLI Tool**
+- Interactive terminal interface with Rich library
+- Commands: playback, search, playlist, library, device, status
+- Real-time status display and device management
+- Color-coded output and progress bars
+
+**🐳 DevOps Ready**
+- Multi-stage Dockerfile for optimized builds
+- Docker Compose with Redis, Prometheus, Grafana
+- GitHub Actions CI/CD (test, quality, docker, release)
+- Pre-commit hooks for code quality
+
+**⚙️ Configuration Management**
+- Centralized settings with environment variables
+- Optional features (cache backend, metrics, CLI)
+- Flexible deployment options
+
+### 🚀 v1.2.0 - Performance & Caching
 
 **⚡ Intelligent Caching Layer** (10-100x performance boost)
 - Smart TTL strategies by data type (static data cached 24h, dynamic 10s)
 - Memory cache (default) + optional Redis for distributed caching
+- Cache warming, invalidation, and statistics
 - 80%+ cache hit rate for typical usage
 - Zero configuration, works out of the box
 
-**📊 Prometheus Metrics** (Production observability)
-- Optional metrics collection (install with `pip install -e ".[metrics]"`)
-- Track tool calls, cache performance, API usage, latency
-- Built-in Grafana dashboards for visualization
-- Graceful degradation—works without prometheus-client
-
-**🐳 Docker Infrastructure**
-- Multi-stage optimized builds
-- Redis, Prometheus, and Grafana included
-- Production-ready compose files
-- Health checks and monitoring
-
-See [src/spotify_mcp/infrastructure/](src/spotify_mcp/infrastructure/) for implementation details.
-
-### 🚀 v1.0 - Production Ready (86 Tools - 100% API Coverage)
+### 🚀 v1.0.0 - Complete API Coverage (86 Tools)
 
 **🎵 Playback Control** (12 tools)
 Full control over your music: play, pause, skip, volume, shuffle, repeat, seek, device switching, recently played history
