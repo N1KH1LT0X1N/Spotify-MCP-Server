@@ -10,7 +10,7 @@
   
   **Control Spotify with natural language through Claude Desktop.**
   
-  *81 tools • 8 resources • 8 prompts*
+  *75 tools • 8 resources • 8 prompts*
 </div>
 
 ---
@@ -45,7 +45,7 @@ Just talk naturally:
 
 ---
 
-## 🛠️ Tools (81)
+## 🛠️ Tools (75)
 
 | Category | Count | Description |
 |----------|-------|-------------|
