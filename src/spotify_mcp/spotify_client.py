@@ -47,7 +47,14 @@ class SpotifyClient:
                         time.sleep(retry_after)
                         retry_delay *= 2
                         continue
-                    raise Exception(f"Rate limited by Spotify API. Please try again in {retry_after} seconds.")
+                    raise Exception(
+                        f"Rate limited by Spotify API. Please wait {retry_after} seconds before retrying.\n"
+                        "Tips to avoid rate limiting:\n"
+                        "- Batch multiple requests together\n"
+                        "- Use caching for frequently accessed data (built-in)\n"
+                        "- Avoid making rapid repeated requests\n"
+                        "- Space out requests by at least 100-200ms"
+                    )
 
                 # No active device
                 elif e.http_status == 404 and "NO_ACTIVE_DEVICE" in str(e):
@@ -77,8 +84,12 @@ class SpotifyClient:
                 # Unauthorized - token issues
                 elif e.http_status == 401:
                     raise Exception(
-                        "Authentication failed. Your token may have expired. "
-                        "Please restart the server to re-authenticate."
+                        "Authentication failed. Your access token has expired or is invalid.\n"
+                        "To fix this:\n"
+                        "1. Run: python -m spotify_mcp.auth\n"
+                        "2. Complete the authorization flow in your browser\n"
+                        "3. Restart the MCP server\n"
+                        "Note: Tokens are automatically refreshed and typically last 1 hour."
                     )
 
                 # Not found

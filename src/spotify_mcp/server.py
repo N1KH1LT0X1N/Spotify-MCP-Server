@@ -119,6 +119,12 @@ from spotify_mcp.tools.shows import (
 from spotify_mcp.tools.tracks import (
     TRACK_TOOLS, get_track, get_several_tracks
 )
+from spotify_mcp.tools.composite import (
+    COMPOSITE_TOOLS, create_playlist_with_tracks, get_artist_full_profile,
+    search_and_create_playlist, get_listening_summary, save_multiple_items,
+    compare_user_libraries
+)
+from spotify_mcp.tools.composite_definitions import COMPOSITE_TOOL_DEFINITIONS
 
 
 # Create server instance with metadata
@@ -242,6 +248,14 @@ TOOL_FUNCTIONS = {
     # Tracks
     "get_track": get_track,
     "get_several_tracks": get_several_tracks,
+    
+    # Composite Tools (Multi-step operations)
+    "create_playlist_with_tracks": create_playlist_with_tracks,
+    "get_artist_full_profile": get_artist_full_profile,
+    "search_and_create_playlist": search_and_create_playlist,
+    "get_listening_summary": get_listening_summary,
+    "save_multiple_items": save_multiple_items,
+    "compare_user_libraries": compare_user_libraries,
 }
 
 
@@ -264,7 +278,8 @@ async def list_tools() -> list[Tool]:
         GENRE_TOOLS +
         MARKET_TOOLS +
         SHOW_TOOLS +
-        TRACK_TOOLS
+        TRACK_TOOLS +
+        COMPOSITE_TOOL_DEFINITIONS
     )
     
     return [
