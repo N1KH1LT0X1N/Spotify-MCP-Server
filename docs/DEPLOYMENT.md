@@ -172,7 +172,7 @@ Location: `~/Library/Application Support/Claude/claude_desktop_config.json`
 ```bash
 # Check tools are loading
 cd src && python -c "from spotify_mcp.server import TOOL_FUNCTIONS; print(len(TOOL_FUNCTIONS))"
-# Expected: 75
+# Expected: 81
 
 # Full verification
 python tools/verify_tools.py

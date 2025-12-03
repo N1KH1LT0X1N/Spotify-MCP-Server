@@ -1,6 +1,6 @@
 # 🛠️ Tool Reference
 
-> **Total:** 75 tools (69 standard + 6 composite)
+> **Total:** 81 tools (75 standard + 6 composite)
 
 ---
 
