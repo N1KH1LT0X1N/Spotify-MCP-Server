@@ -18,7 +18,7 @@ def get_show(client: SpotifyClient, show_id: str, market: Optional[str] = None) 
     # Extract ID from URI if needed
     show_id = show_id.split(":")[-1] if ":" in show_id else show_id
     
-    result = client.show(show_id=show_id, market=market)
+    result = client.show(show_id, market)
     
     return {
         "success": True,
@@ -59,7 +59,7 @@ def get_several_shows(client: SpotifyClient, show_ids: List[str],
     # Extract IDs from URIs if needed
     show_ids = [s.split(":")[-1] if ":" in s else s for s in show_ids]
     
-    result = client.shows(show_ids=show_ids, market=market)
+    result = client.shows(show_ids, market)
     
     shows = []
     for show in result.get("shows", []):
@@ -102,7 +102,7 @@ def get_show_episodes(client: SpotifyClient, show_id: str, limit: int = 20,
     # Extract ID from URI if needed
     show_id = show_id.split(":")[-1] if ":" in show_id else show_id
     
-    result = client.show_episodes(show_id=show_id, limit=limit, offset=offset, market=market)
+    result = client.show_episodes(show_id, limit=limit, offset=offset, market=market)
     
     items = result.get("items", [])
     total = result.get("total", 0)
@@ -253,7 +253,7 @@ def check_saved_shows(client: SpotifyClient, show_ids: List[str]) -> Dict[str, A
     # Extract IDs from URIs if needed
     show_ids = [s.split(":")[-1] if ":" in s else s for s in show_ids]
     
-    results = client.current_user_saved_shows_contains(show_ids=show_ids)
+    results = client.current_user_saved_shows_contains(show_ids)
     
     return {
         "success": True,

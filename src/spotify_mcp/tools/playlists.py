@@ -1,4 +1,8 @@
-"""Playlist management tools for Spotify."""
+"""Playlist management tools for Spotify.
+
+Note: Featured Playlists and Category Playlists endpoints were deprecated by Spotify
+on November 27, 2024 for new development mode applications.
+"""
 
 from typing import List, Dict, Any, Optional
 from spotify_mcp.spotify_client import SpotifyClient
@@ -350,116 +354,6 @@ def update_playlist_items(client: SpotifyClient, playlist_id: str,
         "success": True,
         "message": f"Reordered {range_length} item(s) in playlist",
         "snapshot_id": result.get("snapshot_id")
-    }
-
-
-def get_featured_playlists(client: SpotifyClient, limit: int = 20, offset: int = 0,
-                          country: Optional[str] = None, 
-                          locale: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Get Spotify's featured playlists.
-    
-    Args:
-        limit: Maximum number of playlists to return (1-50, default 20)
-        offset: Offset for pagination (default 0)
-        country: ISO 3166-1 alpha-2 country code (e.g., 'US', 'GB')
-        locale: Locale for returned content (e.g., 'en_US', 'es_MX')
-    
-    Returns:
-        Featured playlists with message
-    """
-    if not 1 <= limit <= 50:
-        raise ValueError("limit must be between 1 and 50")
-    
-    results = client.featured_playlists(
-        limit=limit,
-        offset=offset,
-        country=country,
-        locale=locale
-    )
-    
-    message = results.get("message", "")
-    playlists_data = results.get("playlists", {})
-    items = playlists_data.get("items", [])
-    total = playlists_data.get("total", 0)
-    
-    return {
-        "message": message,
-        "playlists": [
-            {
-                "name": item["name"],
-                "uri": item["uri"],
-                "id": item["id"],
-                "description": item.get("description"),
-                "owner": {
-                    "display_name": item.get("owner", {}).get("display_name"),
-                    "id": item.get("owner", {}).get("id")
-                },
-                "total_tracks": item.get("tracks", {}).get("total", 0),
-                "images": item.get("images", [])
-            }
-            for item in items
-        ],
-        "total": total,
-        "limit": limit,
-        "offset": offset,
-        "has_more": offset + limit < total
-    }
-
-
-def get_category_playlists(client: SpotifyClient, category_id: str,
-                          limit: int = 20, offset: int = 0,
-                          country: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Get playlists for a specific category.
-    
-    Args:
-        category_id: Category ID (e.g., 'party', 'workout', 'chill')
-        limit: Maximum number of playlists to return (1-50, default 20)
-        offset: Offset for pagination (default 0)
-        country: ISO 3166-1 alpha-2 country code (e.g., 'US', 'GB')
-    
-    Returns:
-        Category playlists
-    """
-    if not 1 <= limit <= 50:
-        raise ValueError("limit must be between 1 and 50")
-    
-    if not category_id:
-        raise ValueError("category_id cannot be empty")
-    
-    results = client.category_playlists(
-        category_id=category_id,
-        limit=limit,
-        offset=offset,
-        country=country
-    )
-    
-    playlists_data = results.get("playlists", {})
-    items = playlists_data.get("items", [])
-    total = playlists_data.get("total", 0)
-    
-    return {
-        "category_id": category_id,
-        "playlists": [
-            {
-                "name": item["name"],
-                "uri": item["uri"],
-                "id": item["id"],
-                "description": item.get("description"),
-                "owner": {
-                    "display_name": item.get("owner", {}).get("display_name"),
-                    "id": item.get("owner", {}).get("id")
-                },
-                "total_tracks": item.get("tracks", {}).get("total", 0),
-                "images": item.get("images", [])
-            }
-            for item in items
-        ],
-        "total": total,
-        "limit": limit,
-        "offset": offset,
-        "has_more": offset + limit < total
     }
 
 
@@ -838,67 +732,6 @@ PLAYLIST_TOOLS = [
                 }
             },
             "required": ["playlist_id", "range_start", "insert_before"]
-        }
-    },
-    {
-        "name": "get_featured_playlists",
-        "description": "Get Spotify's featured playlists curated by Spotify's editors.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "limit": {
-                    "type": "integer",
-                    "description": "Maximum number of playlists to return (1-50)",
-                    "minimum": 1,
-                    "maximum": 50,
-                    "default": 20
-                },
-                "offset": {
-                    "type": "integer",
-                    "description": "Offset for pagination",
-                    "minimum": 0,
-                    "default": 0
-                },
-                "country": {
-                    "type": "string",
-                    "description": "ISO 3166-1 alpha-2 country code (e.g., 'US', 'GB') for region-specific playlists"
-                },
-                "locale": {
-                    "type": "string",
-                    "description": "Locale for returned content (e.g., 'en_US', 'es_MX')"
-                }
-            }
-        }
-    },
-    {
-        "name": "get_category_playlists",
-        "description": "Get playlists for a specific category (e.g., 'party', 'workout', 'chill').",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "category_id": {
-                    "type": "string",
-                    "description": "Category ID (e.g., 'party', 'workout', 'chill', 'focus')"
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Maximum number of playlists to return (1-50)",
-                    "minimum": 1,
-                    "maximum": 50,
-                    "default": 20
-                },
-                "offset": {
-                    "type": "integer",
-                    "description": "Offset for pagination",
-                    "minimum": 0,
-                    "default": 0
-                },
-                "country": {
-                    "type": "string",
-                    "description": "ISO 3166-1 alpha-2 country code (e.g., 'US', 'GB')"
-                }
-            },
-            "required": ["category_id"]
         }
     },
     {

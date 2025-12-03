@@ -1,4 +1,8 @@
-"""Artist information and discovery tools for Spotify."""
+"""Artist information and discovery tools for Spotify.
+
+Note: Related Artists endpoint was deprecated by Spotify on November 27, 2024
+for new development mode applications.
+"""
 
 from typing import List, Dict, Any, Optional
 from spotify_mcp.spotify_client import SpotifyClient
@@ -187,41 +191,6 @@ def get_artist_top_tracks(client: SpotifyClient, artist_id: str,
     }
 
 
-def get_artist_related_artists(client: SpotifyClient, artist_id: str) -> Dict[str, Any]:
-    """
-    Get Spotify catalog information about artists similar to a given artist.
-    
-    Args:
-        artist_id: The Spotify ID or URI for the artist
-    
-    Returns:
-        List of related artists based on analysis of Spotify community listening history
-    """
-    # Extract ID from URI if needed
-    artist_id = artist_id.split(":")[-1] if ":" in artist_id else artist_id
-    
-    results = client.artist_related_artists(artist_id)
-    artists = results.get("artists", [])
-    
-    return {
-        "artist_id": artist_id,
-        "related_artists": [
-            {
-                "id": artist["id"],
-                "uri": artist["uri"],
-                "name": artist["name"],
-                "genres": artist.get("genres", []),
-                "popularity": artist.get("popularity", 0),
-                "followers": artist.get("followers", {}).get("total", 0),
-                "images": artist.get("images", []),
-                "external_urls": artist.get("external_urls", {})
-            }
-            for artist in artists
-        ],
-        "total": len(artists)
-    }
-
-
 # Tool definitions for MCP
 ARTIST_TOOLS = [
     {
@@ -304,20 +273,6 @@ ARTIST_TOOLS = [
                     "type": "string",
                     "description": "ISO 3166-1 alpha-2 country code (e.g., 'US', 'GB', 'CA', 'DE', 'FR')",
                     "default": "US"
-                }
-            },
-            "required": ["artist_id"]
-        }
-    },
-    {
-        "name": "get_artist_related_artists",
-        "description": "Get artists similar to a given artist based on Spotify's analysis of user listening patterns.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "artist_id": {
-                    "type": "string",
-                    "description": "The Spotify ID or URI for the artist"
                 }
             },
             "required": ["artist_id"]

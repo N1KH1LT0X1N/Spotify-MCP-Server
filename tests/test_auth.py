@@ -248,24 +248,16 @@ class TestSecurityManagerIntegration:
     
     def test_get_tokens_from_env(self, monkeypatch):
         """Test retrieving tokens from environment."""
-        from unittest.mock import patch
+        monkeypatch.setenv("SPOTIFY_ACCESS_TOKEN", "env_access")
+        monkeypatch.setenv("SPOTIFY_REFRESH_TOKEN", "env_refresh")
+        monkeypatch.setenv("SPOTIFY_TOKEN_EXPIRES_AT", "9999999999")
         
-        # Mock os.getenv to return our test values
-        def mock_getenv(key, default=None):
-            env_values = {
-                "SPOTIFY_ACCESS_TOKEN": "env_access",
-                "SPOTIFY_REFRESH_TOKEN": "env_refresh",
-                "SPOTIFY_TOKEN_EXPIRES_AT": "9999999999"
-            }
-            return env_values.get(key, default)
+        security = SecurityManager()
+        tokens = security.get_tokens()
         
-        with patch('os.getenv', side_effect=mock_getenv):
-            security = SecurityManager()
-            tokens = security.get_tokens()
-            
-            assert tokens["access_token"] == "env_access"
-            assert tokens["refresh_token"] == "env_refresh"
-            assert tokens["expires_at"] == "9999999999"
+        assert tokens["access_token"] == "env_access"
+        assert tokens["refresh_token"] == "env_refresh"
+        assert tokens["expires_at"] == "9999999999"
     
     def test_revoke_tokens(self, temp_env_file):
         """Test token revocation."""

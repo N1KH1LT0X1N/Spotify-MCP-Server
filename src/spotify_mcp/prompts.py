@@ -154,11 +154,11 @@ class SpotifyPrompts:
                         "text": f"I want to discover {mood} music. Can you help me find some great tracks?\n\n"
                                 f"Here's what I'd like:\n"
                                 f"1. Search for popular {mood} playlists and artists\n"
-                                f"2. Get personalized recommendations based on my listening history\n"
-                                f"3. Show me some related artists I might not know about\n"
-                                f"4. Suggest a few albums or playlists I should check out\n\n"
+                                f"2. Look at my top artists and tracks for inspiration\n"
+                                f"3. Suggest some albums or playlists I should check out\n"
+                                f"4. Check what's trending in new releases\n\n"
                                 f"Feel free to use resources like my current playback state and recently "
-                                f"played tracks to make better recommendations!"
+                                f"played tracks for context!"
                     }
                 }
             ]
@@ -289,10 +289,10 @@ class SpotifyPrompts:
                         "type": "text",
                         "text": f"I want to find music similar to '{reference}'. Can you help?\n\n"
                                 f"Please:\n"
-                                f"1. Search for '{reference}' to get the artist/track ID\n"
-                                f"2. Get related artists or track recommendations\n"
-                                f"3. Show me their top tracks\n"
-                                f"4. Suggest playlists with similar music\n\n"
+                                f"1. Search for '{reference}' to get the artist/track info\n"
+                                f"2. Show me their top tracks and albums\n"
+                                f"3. Search for playlists with similar artists\n"
+                                f"4. Check their genre to find more artists in that style\n\n"
                                 f"I'm looking to expand my music taste while staying in a similar vibe!"
                     }
                 }
@@ -358,9 +358,9 @@ class SpotifyPrompts:
                                 f"- Albums and EPs (chronological)\n"
                                 f"- Featured tracks\n\n"
                                 f"**Discovery:**\n"
-                                f"- Related artists\n"
-                                f"- Similar recommendations\n"
-                                f"- Collaborative tracks\n\n"
+                                f"- Search for similar genre playlists\n"
+                                f"- Collaborative tracks and features\n"
+                                f"- Artists with similar styles\n\n"
                                 f"Give me a comprehensive overview of {artist_name}'s musical universe!"
                     }
                 }

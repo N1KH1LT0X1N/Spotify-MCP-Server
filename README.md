@@ -13,7 +13,7 @@
 
 **Transform your AI assistant into a Spotify DJ.** Natural language commands become instant music control—search songs, manage playlists, control playback, discover new artists, and explore your entire library through simple conversation.
 
-> **Enterprise-ready** with 86 tools (100% Spotify API coverage), 8 resources, 8 prompts, production infrastructure, and comprehensive docs. Setup in 5 minutes. Issues? Check [troubleshooting](docs/setup/troubleshooting.md) for instant solutions.
+> **Enterprise-ready** with 69 tools, 8 resources, 8 prompts, production infrastructure, and comprehensive docs. Setup in 5 minutes. Issues? Check [troubleshooting](docs/setup/troubleshooting.md) for instant solutions.
 
 ## ⚡ Quick Start
 
@@ -39,7 +39,7 @@ Just talk naturally to your AI:
 **🔍 Discover & Explore**
 - "Find me some chill jazz tracks"
 - "Show me albums by Radiohead"
-- "What are similar artists to Tame Impala?"
+- "What are the top tracks by Tame Impala?"
 
 **📚 Manage Your Library**
 - "Save this album to my library"
@@ -47,9 +47,9 @@ Just talk naturally to your AI:
 - "Create a playlist called 'Workout Mix'"
 
 **💡 Get Smart**
-- "Recommend songs based on chill vibes"
-- "Show me new album releases"
+- "What are the new album releases?"
 - "Add this to my queue for later"
+- "What are my top played tracks?"
 
 ## ✨ Features
 
@@ -93,13 +93,13 @@ Just talk naturally to your AI:
 - 80%+ cache hit rate for typical usage
 - Zero configuration, works out of the box
 
-### 🚀 v1.0.0 - Complete API Coverage (86 Tools)
+### 🚀 v2.0.0 - Cleaned & Optimized (69 Tools)
 
 **🎵 Playback Control** (12 tools)
 Full control over your music: play, pause, skip, volume, shuffle, repeat, seek, device switching, recently played history
 
-**🔍 Search & Discovery** (2 tools)
-Find anything on Spotify and get personalized recommendations
+**🔍 Search** (1 tool)
+Find anything on Spotify - tracks, albums, artists, playlists
 
 **💾 Library Management** (4 tools)
 Save, remove, and check your favorite tracks
@@ -107,29 +107,20 @@ Save, remove, and check your favorite tracks
 **📀 Album Operations** (8 tools)
 Explore albums, save to library, discover new releases
 
-**🎤 Artist Operations** (5 tools)
-Dive deep into artist profiles, discographies, and related artists
-
-**📚 Audiobook Operations** (7 tools)
-Browse, save, and manage audiobooks and chapters
+**🎤 Artist Operations** (4 tools)
+Dive deep into artist profiles, discographies, and top tracks
 
 **🏷️ Category Browsing** (2 tools)
 Explore Spotify content categories by genre, mood, and region
 
-**📖 Chapter Access** (2 tools)
-Navigate audiobook chapters with detailed information
-
 **🎙️ Episode Management** (6 tools)
 Browse, save, and manage podcast episodes
-
-**🎸 Genre Discovery** (1 tool)
-Get available genre seeds for music recommendations
 
 **🌍 Market Information** (1 tool)
 Check Spotify availability by country
 
-**🎶 Playlist Operations** (14 tools)
-Create, modify, manage, and discover playlists—update details, reorder tracks, upload covers, follow/unfollow, browse featured and category playlists
+**🎶 Playlist Operations** (12 tools)
+Create, modify, manage playlists—update details, reorder tracks, upload covers, follow/unfollow
 
 **⏯️ Queue Management** (2 tools)
 View and control what plays next
@@ -140,15 +131,24 @@ Access profiles, follow/unfollow artists and users, check followings, and get li
 **📻 Show Management** (7 tools)
 Browse podcasts, save shows, get episodes
 
-**🎵 Track Operations** (5 tools)
-Get track details, audio features, and audio analysis
+**🎵 Track Operations** (2 tools)
+Get track details and metadata
+
+### ⚠️ Deprecated Endpoints (Removed in v2.0.0)
+
+The following were deprecated by Spotify on November 27, 2024 for development mode apps:
+- Audio Features & Audio Analysis
+- Recommendations & Genre Seeds
+- Related Artists
+- Featured Playlists & Category Playlists
+- Audiobooks & Chapters (require Extended Quota Mode)
 
 ### 🔮 Coming in Future Releases
 
 **Power Features**
 - Batch operations for efficiency
 - Advanced library filtering and organization
-- Social features (follow/unfollow artists and users)
+- Composite tools for common workflows
 
 ## Prerequisites
 
@@ -214,7 +214,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
       "env": {
         "SPOTIFY_CLIENT_ID": "your_client_id",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret",
-        "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
+        "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback",
+        "PYTHONPATH": "C:\\full\\path\\to\\spotify_mcp\\src"
       },
       "icon": "C:\\full\\path\\to\\spotify_mcp\\icon.svg"
     }
@@ -222,7 +223,11 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 }
 ```
 
-**Note:** Add the `icon` property with the full path to `icon.svg` to display the beautiful Spotify icon in Claude Desktop! 🎵
+**Important Notes:**
+- 🎵 **Icon:** Add the `icon` property with the full path to `icon.svg` to display the beautiful Spotify icon in Claude Desktop!
+- 📁 **PYTHONPATH:** Required when running from source - must point to the `src` directory where the `spotify_mcp` module is located
+- 🔑 **Credentials:** Replace `your_client_id` and `your_client_secret` with your actual Spotify credentials
+- 🌐 **Redirect URI:** Must use `127.0.0.1` (not `localhost`) - Spotify API requirement
 
 ### Available Tools
 
@@ -239,9 +244,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - `set_repeat` - Set repeat mode
 - `seek_to_position` - Seek to position in track
 
-#### Search & Discovery
+#### Search
 - `search` - Search for tracks, albums, artists, or playlists
-- `get_recommendations` - Get track recommendations based on seeds
 
 #### Library Management - Tracks
 - `get_saved_tracks` - Get user's saved tracks
@@ -264,16 +268,6 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - `get_several_artists` - Get multiple artists efficiently
 - `get_artist_albums` - Get artist's albums, singles, and compilations
 - `get_artist_top_tracks` - Get artist's top tracks by market
-- `get_artist_related_artists` - Get similar artists
-
-#### Audiobook Operations
-- `get_audiobook` - Get audiobook details, chapters, authors, and narrators
-- `get_several_audiobooks` - Get multiple audiobooks efficiently
-- `get_audiobook_chapters` - Get chapters from an audiobook
-- `get_saved_audiobooks` - Get user's saved audiobooks
-- `save_audiobooks` - Save audiobooks to library
-- `remove_saved_audiobooks` - Remove audiobooks from library
-- `check_saved_audiobooks` - Check if audiobooks are saved
 
 #### Playlist Operations
 - `get_user_playlists` - Get user's playlists

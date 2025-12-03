@@ -10,7 +10,7 @@ import json
 import sys
 import uuid
 import threading
-from datetime import datetime, timezone
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, Optional
 from contextlib import contextmanager
@@ -101,7 +101,7 @@ class JSONFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         """Format log record as JSON."""
         log_data = {
-            'timestamp': datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+            'timestamp': datetime.utcnow().isoformat() + 'Z',
             'level': record.levelname,
             'logger': record.name,
             'message': record.getMessage(),

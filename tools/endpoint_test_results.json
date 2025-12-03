@@ -1,0 +1,701 @@
+{
+  "timestamp": "2025-12-03T01:27:22.662773",
+  "summary": {
+    "working": 41,
+    "restricted": 0,
+    "premium_required": 0,
+    "errors": 15,
+    "skipped": 30,
+    "total": 86
+  },
+  "results": [
+    {
+      "tool_name": "get_current_playback",
+      "category": "Playback",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "May return empty if nothing playing"
+    },
+    {
+      "tool_name": "get_available_devices",
+      "category": "Playback",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Returns list of devices"
+    },
+    {
+      "tool_name": "get_recently_played",
+      "category": "Playback",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Last played tracks"
+    },
+    {
+      "tool_name": "play",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "pause",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "skip_next",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "skip_previous",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "set_volume",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "set_shuffle",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "set_repeat",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "seek_to_position",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "transfer_playback",
+      "category": "Playback",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playback state. Requires active device + Premium."
+    },
+    {
+      "tool_name": "search",
+      "category": "Search",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_recommendations",
+      "category": "Search",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Resource not found: https://api.spotify.com/v1/recommendations?limit=5&seed_tracks=4iV5W9uYEdYUVa79Axb7Rh:\n None",
+      "notes": "Personalized recommendations - may be restricted"
+    },
+    {
+      "tool_name": "get_saved_tracks",
+      "category": "Library",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "check_saved_tracks",
+      "category": "Library",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "save_tracks",
+      "category": "Library",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library. Likely works if read operations work."
+    },
+    {
+      "tool_name": "remove_saved_tracks",
+      "category": "Library",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library. Likely works if read operations work."
+    },
+    {
+      "tool_name": "get_album",
+      "category": "Albums",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_several_albums",
+      "category": "Albums",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_album_tracks",
+      "category": "Albums",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_saved_albums",
+      "category": "Albums",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "check_saved_albums",
+      "category": "Albums",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_new_releases",
+      "category": "Albums",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "save_albums",
+      "category": "Albums",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library."
+    },
+    {
+      "tool_name": "remove_saved_albums",
+      "category": "Albums",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library."
+    },
+    {
+      "tool_name": "get_artist",
+      "category": "Artists",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_several_artists",
+      "category": "Artists",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_artist_albums",
+      "category": "Artists",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_artist_top_tracks",
+      "category": "Artists",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_artist_related_artists",
+      "category": "Artists",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Resource not found: https://api.spotify.com/v1/artists/3TVXtAsR1Inumwj472S9r4/related-artists:\n Not Found",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_user_playlists",
+      "category": "Playlists",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_playlist",
+      "category": "Playlists",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Testing with user's own playlist"
+    },
+    {
+      "tool_name": "get_featured_playlists",
+      "category": "Playlists",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Resource not found: https://api.spotify.com/v1/browse/featured-playlists?limit=5&offset=0:\n Not Found",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_category_playlists",
+      "category": "Playlists",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Resource not found: https://api.spotify.com/v1/browse/categories/toplists/playlists?limit=5&offset=0:\n Not Found",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_playlist_cover_image",
+      "category": "Playlists",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_user_playlists_by_id",
+      "category": "Playlists",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "create_playlist",
+      "category": "Playlists",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playlists."
+    },
+    {
+      "tool_name": "add_tracks_to_playlist",
+      "category": "Playlists",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playlists."
+    },
+    {
+      "tool_name": "remove_tracks_from_playlist",
+      "category": "Playlists",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playlists."
+    },
+    {
+      "tool_name": "change_playlist_details",
+      "category": "Playlists",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playlists."
+    },
+    {
+      "tool_name": "update_playlist_items",
+      "category": "Playlists",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playlists."
+    },
+    {
+      "tool_name": "add_custom_playlist_cover_image",
+      "category": "Playlists",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playlists."
+    },
+    {
+      "tool_name": "follow_playlist",
+      "category": "Playlists",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playlists."
+    },
+    {
+      "tool_name": "unfollow_playlist",
+      "category": "Playlists",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify playlists."
+    },
+    {
+      "tool_name": "get_queue",
+      "category": "Queue",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Requires active playback"
+    },
+    {
+      "tool_name": "add_to_queue",
+      "category": "Queue",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify queue."
+    },
+    {
+      "tool_name": "get_current_user",
+      "category": "User",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_top_items",
+      "category": "User",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Top tracks/artists - may be restricted"
+    },
+    {
+      "tool_name": "get_user_profile",
+      "category": "User",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_followed_artists",
+      "category": "User",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "check_following_artists_or_users",
+      "category": "User",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "check_current_user_follows_playlist",
+      "category": "User",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "follow_artists_or_users",
+      "category": "User",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify following list."
+    },
+    {
+      "tool_name": "unfollow_artists_or_users",
+      "category": "User",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify following list."
+    },
+    {
+      "tool_name": "get_audiobook",
+      "category": "Audiobooks",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Resource not found: https://api.spotify.com/v1/audiobooks/7iHfbu1YPACw6oZPAFJtqe?market=US:\n Resource not found",
+      "notes": "Audiobook API - likely restricted"
+    },
+    {
+      "tool_name": "get_several_audiobooks",
+      "category": "Audiobooks",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Audiobook API - likely restricted"
+    },
+    {
+      "tool_name": "get_audiobook_chapters",
+      "category": "Audiobooks",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Resource not found: https://api.spotify.com/v1/audiobooks/7iHfbu1YPACw6oZPAFJtqe/chapters?limit=5&offset=0&market=US:\n Resource not found",
+      "notes": "Audiobook API - likely restricted"
+    },
+    {
+      "tool_name": "get_saved_audiobooks",
+      "category": "Audiobooks",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "'Spotify' object has no attribute 'get_users_saved_audiobooks'",
+      "notes": "Audiobook API - likely restricted"
+    },
+    {
+      "tool_name": "check_saved_audiobooks",
+      "category": "Audiobooks",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "'Spotify' object has no attribute 'check_users_audiobooks'",
+      "notes": "Audiobook API - likely restricted"
+    },
+    {
+      "tool_name": "save_audiobooks",
+      "category": "Audiobooks",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library. Audiobook API likely restricted anyway."
+    },
+    {
+      "tool_name": "remove_saved_audiobooks",
+      "category": "Audiobooks",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library. Audiobook API likely restricted anyway."
+    },
+    {
+      "tool_name": "get_several_browse_categories",
+      "category": "Categories",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_single_browse_category",
+      "category": "Categories",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_chapter",
+      "category": "Chapters",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "'Spotify' object has no attribute 'get_chapter'",
+      "notes": "Chapter API - likely restricted"
+    },
+    {
+      "tool_name": "get_several_chapters",
+      "category": "Chapters",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "'Spotify' object has no attribute 'get_chapters'",
+      "notes": "Chapter API - likely restricted"
+    },
+    {
+      "tool_name": "get_episode",
+      "category": "Episodes",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Resource not found: https://api.spotify.com/v1/episodes/512ojhOuo1ktJprKbVcKyQ:\n Resource not found",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_several_episodes",
+      "category": "Episodes",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_saved_episodes",
+      "category": "Episodes",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "check_saved_episodes",
+      "category": "Episodes",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "save_episodes",
+      "category": "Episodes",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library."
+    },
+    {
+      "tool_name": "remove_saved_episodes",
+      "category": "Episodes",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library."
+    },
+    {
+      "tool_name": "get_available_genre_seeds",
+      "category": "Genres",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Resource not found: https://api.spotify.com/v1/recommendations/available-genre-seeds:\n None",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_available_markets",
+      "category": "Markets",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_show",
+      "category": "Shows",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_several_shows",
+      "category": "Shows",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_show_episodes",
+      "category": "Shows",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_saved_shows",
+      "category": "Shows",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "check_saved_shows",
+      "category": "Shows",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "save_shows",
+      "category": "Shows",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library."
+    },
+    {
+      "tool_name": "remove_saved_shows",
+      "category": "Shows",
+      "status": "SKIPPED",
+      "http_status": 0,
+      "error_message": "",
+      "notes": "Skipped: Would modify library."
+    },
+    {
+      "tool_name": "get_track",
+      "category": "Tracks",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_several_tracks",
+      "category": "Tracks",
+      "status": "WORKING",
+      "http_status": 0,
+      "error_message": "",
+      "notes": ""
+    },
+    {
+      "tool_name": "get_track_audio_features",
+      "category": "Tracks",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Access forbidden: https://api.spotify.com/v1/audio-features/?ids=4iV5W9uYEdYUVa79Axb7Rh:\n None. This could be due to regional restrictions, unavailable content, or insufficient permissions.",
+      "notes": "Audio Features API - likely restricted"
+    },
+    {
+      "tool_name": "get_tracks_audio_features",
+      "category": "Tracks",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Failed to get audio features: Access forbidden: https://api.spotify.com/v1/audio-features/?ids=4iV5W9uYEdYUVa79Axb7Rh,0VjIjW4GlUZAMYd2vXMi3b:\n None. This could be due to regional restrictions, unavailable content, or insufficient permissions.. Make sure the track IDs are valid and the tracks are available on Spotify.",
+      "notes": "Audio Features API - likely restricted"
+    },
+    {
+      "tool_name": "get_track_audio_analysis",
+      "category": "Tracks",
+      "status": "ERROR",
+      "http_status": 0,
+      "error_message": "Access forbidden: https://api.spotify.com/v1/audio-analysis/4iV5W9uYEdYUVa79Axb7Rh:\n None. This could be due to regional restrictions, unavailable content, or insufficient permissions.",
+      "notes": "Audio Analysis API - likely restricted"
+    }
+  ]
+}

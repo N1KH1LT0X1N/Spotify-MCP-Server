@@ -1,4 +1,8 @@
-"""Track operations and audio analysis tools for Spotify."""
+"""Track operations for Spotify.
+
+Note: Audio Features and Audio Analysis endpoints were deprecated by Spotify
+on November 27, 2024 for new development mode applications.
+"""
 
 from typing import List, Dict, Any, Optional
 from spotify_mcp.spotify_client import SpotifyClient
@@ -18,7 +22,7 @@ def get_track(client: SpotifyClient, track_id: str, market: Optional[str] = None
     # Extract ID from URI if needed
     track_id = track_id.split(":")[-1] if ":" in track_id else track_id
     
-    result = client.track(track_id=track_id, market=market)
+    result = client.track(track_id, market)
     
     return {
         "success": True,
@@ -68,7 +72,7 @@ def get_several_tracks(client: SpotifyClient, track_ids: List[str],
     # Extract IDs from URIs if needed
     track_ids = [t.split(":")[-1] if ":" in t else t for t in track_ids]
     
-    result = client.tracks(track_ids=track_ids, market=market)
+    result = client.tracks(track_ids, market)
     
     tracks = []
     for track in result.get("tracks", []):
@@ -94,163 +98,6 @@ def get_several_tracks(client: SpotifyClient, track_ids: List[str],
         "success": True,
         "tracks": tracks,
         "total": len(tracks)
-    }
-
-
-def get_tracks_audio_features(client: SpotifyClient, track_ids: List[str]) -> Dict[str, Any]:
-    """
-    Get audio features for multiple tracks (tempo, energy, danceability, etc.).
-    
-    Args:
-        track_ids: List of track IDs or URIs (up to 100)
-    
-    Returns:
-        List of audio features for each track
-    
-    Note:
-        Some tracks may not have audio features available. They will be None in results.
-    """
-    if not track_ids:
-        raise ValueError("track_ids cannot be empty")
-    
-    if len(track_ids) > 100:
-        raise ValueError("Cannot retrieve audio features for more than 100 tracks at once")
-    
-    # Extract IDs from URIs if needed and validate format
-    cleaned_ids = []
-    for track_id in track_ids:
-        # Extract ID from URI (spotify:track:ID) or URL
-        if ":" in track_id:
-            track_id = track_id.split(":")[-1]
-        elif "/" in track_id:
-            track_id = track_id.split("/")[-1].split("?")[0]
-        
-        # Basic validation - Spotify IDs are 22 characters
-        if len(track_id) != 22:
-            raise ValueError(f"Invalid track ID format: {track_id}. Expected 22-character Spotify ID.")
-        
-        cleaned_ids.append(track_id)
-    
-    # Get audio features (returns list of feature objects)
-    try:
-        results = client.audio_features(tracks=cleaned_ids)
-    except Exception as e:
-        # Provide more helpful error message
-        raise Exception(
-            f"Failed to get audio features: {str(e)}. "
-            "Make sure the track IDs are valid and the tracks are available on Spotify."
-        )
-    
-    features = []
-    for feature in results:
-        if feature:  # Some might be None if not available
-            features.append({
-                "id": feature.get("id"),
-                "uri": feature.get("uri"),
-                "acousticness": feature.get("acousticness"),
-                "danceability": feature.get("danceability"),
-                "energy": feature.get("energy"),
-                "instrumentalness": feature.get("instrumentalness"),
-                "key": feature.get("key"),
-                "liveness": feature.get("liveness"),
-                "loudness": feature.get("loudness"),
-                "mode": feature.get("mode"),
-                "speechiness": feature.get("speechiness"),
-                "tempo": feature.get("tempo"),
-                "time_signature": feature.get("time_signature"),
-                "valence": feature.get("valence"),
-                "duration_ms": feature.get("duration_ms")
-            })
-    
-    return {
-        "success": True,
-        "audio_features": features,
-        "total": len(features)
-    }
-
-
-def get_track_audio_features(client: SpotifyClient, track_id: str) -> Dict[str, Any]:
-    """
-    Get audio features for a single track (tempo, energy, danceability, etc.).
-    
-    Args:
-        track_id: Track ID or URI
-    
-    Returns:
-        Audio features for the track
-    """
-    # Extract ID from URI if needed
-    track_id = track_id.split(":")[-1] if ":" in track_id else track_id
-    
-    # Use the batch method with single track
-    result = client.audio_features(track_ids=[track_id])
-    
-    if not result or not result[0]:
-        raise ValueError(f"No audio features available for track: {track_id}")
-    
-    feature = result[0]
-    
-    return {
-        "success": True,
-        "track_id": feature.get("id"),
-        "audio_features": {
-            "acousticness": feature.get("acousticness"),
-            "danceability": feature.get("danceability"),
-            "energy": feature.get("energy"),
-            "instrumentalness": feature.get("instrumentalness"),
-            "key": feature.get("key"),
-            "liveness": feature.get("liveness"),
-            "loudness": feature.get("loudness"),
-            "mode": feature.get("mode"),
-            "speechiness": feature.get("speechiness"),
-            "tempo": feature.get("tempo"),
-            "time_signature": feature.get("time_signature"),
-            "valence": feature.get("valence"),
-            "duration_ms": feature.get("duration_ms")
-        }
-    }
-
-
-def get_track_audio_analysis(client: SpotifyClient, track_id: str) -> Dict[str, Any]:
-    """
-    Get detailed audio analysis for a track (bars, beats, sections, segments).
-    
-    Args:
-        track_id: Track ID or URI
-    
-    Returns:
-        Detailed audio analysis including bars, beats, sections, and segments
-    """
-    # Extract ID from URI if needed
-    track_id = track_id.split(":")[-1] if ":" in track_id else track_id
-    
-    result = client.audio_analysis(track_id=track_id)
-    
-    return {
-        "success": True,
-        "track_id": track_id,
-        "analysis": {
-            "duration": result.get("track", {}).get("duration"),
-            "sample_rate": result.get("track", {}).get("sample_rate"),
-            "tempo": result.get("track", {}).get("tempo"),
-            "tempo_confidence": result.get("track", {}).get("tempo_confidence"),
-            "time_signature": result.get("track", {}).get("time_signature"),
-            "time_signature_confidence": result.get("track", {}).get("time_signature_confidence"),
-            "key": result.get("track", {}).get("key"),
-            "key_confidence": result.get("track", {}).get("key_confidence"),
-            "mode": result.get("track", {}).get("mode"),
-            "mode_confidence": result.get("track", {}).get("mode_confidence"),
-            "loudness": result.get("track", {}).get("loudness"),
-            "bars": result.get("bars", []),
-            "beats": result.get("beats", []),
-            "sections": result.get("sections", []),
-            "segments": result.get("segments", []),
-            "tatums": result.get("tatums", [])
-        },
-        "bars_count": len(result.get("bars", [])),
-        "beats_count": len(result.get("beats", [])),
-        "sections_count": len(result.get("sections", [])),
-        "segments_count": len(result.get("segments", []))
     }
 
 
@@ -293,51 +140,6 @@ TRACK_TOOLS = [
                 }
             },
             "required": ["track_ids"]
-        }
-    },
-    {
-        "name": "get_tracks_audio_features",
-        "description": "Get audio features (tempo, energy, danceability, valence, etc.) for multiple tracks. Perfect for analyzing music characteristics.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "track_ids": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "List of track IDs or URIs. Maximum 100 tracks.",
-                    "minItems": 1,
-                    "maxItems": 100
-                }
-            },
-            "required": ["track_ids"]
-        }
-    },
-    {
-        "name": "get_track_audio_features",
-        "description": "Get audio features for a single track including tempo, energy, danceability, acousticness, valence, and more.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "track_id": {
-                    "type": "string",
-                    "description": "Track ID or URI"
-                }
-            },
-            "required": ["track_id"]
-        }
-    },
-    {
-        "name": "get_track_audio_analysis",
-        "description": "Get detailed low-level audio analysis for a track including bars, beats, sections, segments, and tatums. Useful for advanced music analysis.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "track_id": {
-                    "type": "string",
-                    "description": "Track ID or URI"
-                }
-            },
-            "required": ["track_id"]
         }
     }
 ]

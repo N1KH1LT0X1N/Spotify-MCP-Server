@@ -15,7 +15,8 @@ import time
 import webbrowser
 from typing import Optional
 from datetime import datetime, timedelta
-from dotenv import load_dotenv, set_key
+from pathlib import Path
+from dotenv import load_dotenv, set_key, find_dotenv
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -26,8 +27,19 @@ try:
 except ImportError:
     SECURITY_AVAILABLE = False
 
-# Load environment variables
-load_dotenv()
+# Load environment variables - only if not already loaded
+# Use same strategy as server.py to ensure consistency
+if not os.getenv("SPOTIFY_CLIENT_ID"):
+    dotenv_path = find_dotenv(usecwd=True)
+    if not dotenv_path:
+        project_root = Path(__file__).parent.parent.parent
+        potential_env = project_root / ".env"
+        if potential_env.exists():
+            dotenv_path = str(potential_env)
+    if dotenv_path:
+        load_dotenv(dotenv_path)
+    else:
+        load_dotenv()  # Fallback to default behavior
 
 # Required scopes for all features
 SCOPES = [
@@ -55,6 +67,12 @@ SCOPES = [
     # Follow
     "user-follow-read",
     "user-follow-modify",
+    
+    # Images (for playlist cover upload)
+    "ugc-image-upload",
+    
+    # Listening History (for podcast/episode playback position)
+    "user-read-playback-position",
 ]
 
 

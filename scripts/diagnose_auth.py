@@ -14,8 +14,26 @@ Run: python diagnose_auth.py --interactive
 
 import os
 import sys
+import io
 from datetime import datetime
 from dotenv import load_dotenv
+
+# Force UTF-8 encoding for Windows console compatibility
+if sys.platform == 'win32' and hasattr(sys.stdout, 'buffer'):
+    try:
+        # Only wrap if not already wrapped and if buffer is available
+        if not isinstance(sys.stdout, io.TextIOWrapper) or sys.stdout.encoding != 'utf-8':
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace', line_buffering=True)
+        if not isinstance(sys.stderr, io.TextIOWrapper) or sys.stderr.encoding != 'utf-8':
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace', line_buffering=True)
+    except (AttributeError, io.UnsupportedOperation, ValueError):
+        # Fallback: try reconfigure if available
+        if hasattr(sys.stdout, 'reconfigure'):
+            try:
+                sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+                sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+            except (AttributeError, ValueError):
+                pass
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))

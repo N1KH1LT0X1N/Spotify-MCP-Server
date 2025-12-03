@@ -13,8 +13,17 @@ Commands:
 """
 
 import sys
+import io
 import os
 from pathlib import Path
+
+# Force UTF-8 encoding for Windows console compatibility
+if sys.platform == 'win32':
+    try:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    except (AttributeError, io.UnsupportedOperation):
+        pass
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))

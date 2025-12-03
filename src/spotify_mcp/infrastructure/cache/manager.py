@@ -1,7 +1,21 @@
 """Cache manager for backend selection and configuration."""
 
 import os
+import sys
+import io
 from typing import Optional
+
+# Force UTF-8 encoding for Windows console compatibility
+# BUT ONLY if not running as MCP server (which uses stdin/stdout for JSON-RPC)
+if sys.platform == 'win32' and sys.stdin.isatty() and hasattr(sys.stdout, 'buffer'):
+    try:
+        # Only wrap if not already wrapped and if buffer is available
+        if not isinstance(sys.stdout, io.TextIOWrapper) or sys.stdout.encoding != 'utf-8':
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace', line_buffering=True)
+        if not isinstance(sys.stderr, io.TextIOWrapper) or sys.stderr.encoding != 'utf-8':
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace', line_buffering=True)
+    except (AttributeError, io.UnsupportedOperation, ValueError):
+        pass
 
 from .interface import CacheBackend
 from .memory import MemoryCache

@@ -24,7 +24,7 @@ def get_episode(client: SpotifyClient, episode_id: str, market: str = None) -> D
     # Extract ID from URI if needed
     episode_id = episode_id.split(":")[-1] if ":" in episode_id else episode_id
     
-    result = client.episode(episode_id, market=market)
+    result = client.episode(episode_id, market)
     
     return {
         "id": result.get("id"),
@@ -69,7 +69,7 @@ def get_several_episodes(client: SpotifyClient, episode_ids: List[str],
     # Extract IDs from URIs
     ids = [eid.split(":")[-1] if ":" in eid else eid for eid in episode_ids]
     
-    result = client.episodes(ids, market=market)
+    result = client.episodes(ids, market)
     
     episodes = []
     for episode in result.get("episodes", []):

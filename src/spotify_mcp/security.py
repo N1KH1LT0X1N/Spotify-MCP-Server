@@ -11,12 +11,21 @@ Features:
 
 import os
 import sys
+import io
 import json
 import time
 from datetime import datetime
 from typing import Optional, Dict, List
 from pathlib import Path
 from dotenv import load_dotenv, set_key
+
+# Force UTF-8 encoding for Windows console compatibility
+if sys.platform == 'win32':
+    try:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    except (AttributeError, io.UnsupportedOperation):
+        pass
 
 # Optional: System keychain integration
 try:

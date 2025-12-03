@@ -2,7 +2,6 @@
 
 import sys
 import json
-import pytest
 from pathlib import Path
 
 # Add src to path
@@ -32,12 +31,12 @@ def test_imports():
         )
         print("✅ All 16 tool modules imported successfully")
         
-        # Test passes - no return needed
+        return True
     except Exception as e:
         print(f"❌ Import failed: {e}")
         import traceback
         traceback.print_exc()
-        pytest.fail(f"Import failed: {e}")
+        return False
 
 
 def test_tool_registration():
@@ -114,15 +113,16 @@ def test_tool_registration():
         
         if len(all_tools) == 86 and len(TOOL_FUNCTIONS) == 86:
             print("\n✅ All 86 tools correctly registered!")
+            return True
         else:
             print(f"\n❌ Tool count mismatch!")
-            pytest.fail(f"Expected 86 tools, got {len(all_tools)} defined and {len(TOOL_FUNCTIONS)} registered")
+            return False
             
     except Exception as e:
         print(f"❌ Registration test failed: {e}")
         import traceback
         traceback.print_exc()
-        pytest.fail(f"Registration test failed: {e}")
+        return False
 
 
 def test_tool_schemas():
@@ -180,16 +180,16 @@ def test_tool_schemas():
             print("⚠️  Schema Issues Found:")
             for issue in issues:
                 print(f"   - {issue}")
-            pytest.fail("Test assertion failed")
+            return False
         else:
             print("✅ All 86 tool schemas are valid!")
-            pass  # Test passes
+            return True
             
     except Exception as e:
         print(f"❌ Schema validation failed: {e}")
         import traceback
         traceback.print_exc()
-        pytest.fail("Test assertion failed")
+        return False
 
 
 def test_new_feature():
@@ -210,7 +210,7 @@ def test_new_feature():
             print("✅ get_recently_played in PLAYBACK_TOOLS")
         else:
             print("❌ get_recently_played NOT in PLAYBACK_TOOLS")
-            pytest.fail("Test assertion failed")
+            return False
         
         # Check it's registered
         from spotify_mcp.server import TOOL_FUNCTIONS
@@ -218,7 +218,7 @@ def test_new_feature():
             print("✅ get_recently_played registered in TOOL_FUNCTIONS")
         else:
             print("❌ get_recently_played NOT registered")
-            pytest.fail("Test assertion failed")
+            return False
         
         # Check SpotifyClient has the method
         from spotify_mcp.spotify_client import SpotifyClient
@@ -226,7 +226,7 @@ def test_new_feature():
             print("✅ SpotifyClient.current_user_recently_played method exists")
         else:
             print("❌ SpotifyClient missing current_user_recently_played")
-            pytest.fail("Test assertion failed")
+            return False
         
         # Check function signature
         import inspect
@@ -240,13 +240,13 @@ def test_new_feature():
             print(f"⚠️  Signature mismatch. Expected: {expected_params}, Got: {params}")
         
         print("\n✅ get_recently_played feature fully implemented!")
-        pass  # Test passes
+        return True
         
     except Exception as e:
         print(f"❌ New feature test failed: {e}")
         import traceback
         traceback.print_exc()
-        pytest.fail("Test assertion failed")
+        return False
 
 
 def test_playback_count():
@@ -268,16 +268,16 @@ def test_playback_count():
         
         if count == 12:
             print("\n✅ Playback category has exactly 12 tools!")
-            pass  # Test passes
+            return True
         else:
             print(f"\n❌ Expected 12 playback tools, got {count}")
-            pytest.fail("Test assertion failed")
+            return False
             
     except Exception as e:
         print(f"❌ Playback count test failed: {e}")
         import traceback
         traceback.print_exc()
-        pytest.fail("Test assertion failed")
+        return False
 
 
 def test_syntax_errors():
@@ -304,16 +304,16 @@ def test_syntax_errors():
             print("❌ Syntax errors found:")
             for error in errors:
                 print(f"   - {error}")
-            pytest.fail("Test assertion failed")
+            return False
         else:
             print(f"✅ No syntax errors in {len(py_files)} Python files!")
-            pass  # Test passes
+            return True
             
     except Exception as e:
         print(f"❌ Syntax check failed: {e}")
         import traceback
         traceback.print_exc()
-        pytest.fail("Test assertion failed")
+        return False
 
 
 def main():

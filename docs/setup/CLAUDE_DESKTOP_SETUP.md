@@ -64,7 +64,8 @@ If you installed the package in a virtual environment:
       "env": {
         "SPOTIFY_CLIENT_ID": "your_client_id_here",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret_here",
-        "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
+        "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback",
+        "PYTHONPATH": "C:\\Users\\admin\\OneDrive\\Documents\\GitHub\\spotify_mcp\\src"
       },
       "icon": "C:\\Users\\admin\\OneDrive\\Documents\\GitHub\\spotify_mcp\\icon.svg"
     }
@@ -94,6 +95,9 @@ If you installed with `pip install -e .`:
     }
   }
 }
+```
+
+**Note:** If you installed with `pip install -e .`, PYTHONPATH is not required because the package is already in the Python path.
 ```
 
 ## Verification
@@ -132,9 +136,17 @@ If you installed with `pip install -e .`:
 ### Server Shows but Won't Connect
 
 - Check your credentials are correct
-- Verify PYTHONPATH is set correctly
+- Verify PYTHONPATH is set correctly in the config
 - Make sure you've authenticated at least once (run `python scripts/diagnose_auth.py`)
 - Verify redirect URI is `http://127.0.0.1:8888/callback` (not `localhost`)
+
+### ModuleNotFoundError
+
+**Symptom:** Error: `ModuleNotFoundError: No module named 'spotify_mcp'`
+
+**Cause:** PYTHONPATH is not set in the environment variables
+
+**Solution:** Add `"PYTHONPATH": "C:\\path\\to\\spotify_mcp\\src"` to the `env` section of your Claude Desktop config (see examples above). The PYTHONPATH must point to the `src` directory where the `spotify_mcp` module is located.
 
 ### Testing the Server Manually
 

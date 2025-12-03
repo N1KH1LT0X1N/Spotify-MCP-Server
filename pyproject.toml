@@ -75,10 +75,9 @@ addopts = [
     "-v",
     "--strict-markers",
     "--tb=short",
-    # Uncomment if pytest-cov is installed:
-    # "--cov=src/spotify_mcp",
-    # "--cov-report=term-missing",
-    # "--cov-report=html",
+    "--cov=src/spotify_mcp",
+    "--cov-report=term-missing",
+    "--cov-report=html",
 ]
 
 [tool.black]

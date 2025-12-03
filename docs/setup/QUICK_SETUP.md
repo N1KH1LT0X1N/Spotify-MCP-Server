@@ -13,7 +13,8 @@
       "env": {
         "SPOTIFY_CLIENT_ID": "your_spotify_client_id_here",
         "SPOTIFY_CLIENT_SECRET": "your_spotify_client_secret_here",
-        "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback"
+        "SPOTIFY_REDIRECT_URI": "http://127.0.0.1:8888/callback",
+        "PYTHONPATH": "C:\\path\\to\\spotify_mcp\\src"
       },
       "icon": "C:\\path\\to\\spotify_mcp\\icon.svg"
     }

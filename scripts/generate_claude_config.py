@@ -5,6 +5,8 @@ import json
 import os
 import sys
 from pathlib import Path
+import shutil
+import platform
 
 
 def get_project_root() -> Path:
@@ -70,6 +72,43 @@ def generate_config(use_venv: bool = False) -> dict:
             }
         }
     }
+
+    # Detect Git Bash on Windows and add path for Claude Code if available
+    def find_git_bash_path() -> str:
+        """Return a path to bash.exe from Git for Windows if found, else empty string."""
+        # Respect explicit env override
+        explicit = os.environ.get("CLAUDE_CODE_GIT_BASH_PATH")
+        if explicit:
+            return explicit
+
+        if platform.system().lower() != "windows":
+            return ""
+
+        candidates = [
+            os.path.join(os.environ.get("ProgramFiles", "C:\\Program Files"), "Git", "bin", "bash.exe"),
+            os.path.join(os.environ.get("ProgramFiles(x86)", "C:\\Program Files (x86)"), "Git", "bin", "bash.exe"),
+        ]
+
+        # Check PATH for bash.exe
+        which_bash = shutil.which("bash")
+        if which_bash:
+            candidates.insert(0, which_bash)
+
+        for p in candidates:
+            try:
+                if p and os.path.exists(p):
+                    return p
+            except Exception:
+                continue
+
+        return ""
+
+    git_bash = find_git_bash_path()
+    if git_bash:
+        config["mcpServers"]["spotify"]["env"]["CLAUDE_CODE_GIT_BASH_PATH"] = git_bash
+    else:
+        # Provide an empty key so users can see where to set it
+        config["mcpServers"]["spotify"]["env"]["CLAUDE_CODE_GIT_BASH_PATH"] = os.environ.get("CLAUDE_CODE_GIT_BASH_PATH", "")
     
     # Add PYTHONPATH if not using venv
     if not use_venv:

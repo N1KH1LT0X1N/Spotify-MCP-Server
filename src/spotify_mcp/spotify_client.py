@@ -167,15 +167,6 @@ class SpotifyClient:
         """Search for tracks, albums, artists, or playlists. Cached for 10 minutes."""
         return self._handle_api_call(self.sp.search, q=q, limit=limit, offset=offset, type=type)
 
-    @cached(CacheStrategy.RECOMMENDATIONS)
-    def recommendations(self, seed_artists: Optional[List[str]] = None,
-                       seed_tracks: Optional[List[str]] = None,
-                       seed_genres: Optional[List[str]] = None, limit: int = 20, **kwargs):
-        """Get recommendations based on seeds. Cached for 10 minutes."""
-        return self._handle_api_call(self.sp.recommendations, seed_artists=seed_artists,
-                                     seed_tracks=seed_tracks, seed_genres=seed_genres,
-                                     limit=limit, **kwargs)
-
     # Library methods - Tracks (cached for 3 minutes)
     @cached(CacheStrategy.USER_LIBRARY)
     def current_user_saved_tracks(self, limit: int = 20, offset: int = 0):
@@ -288,28 +279,6 @@ class SpotifyClient:
         return self._handle_api_call(self.sp.playlist_replace_items, playlist_id=playlist_id,
                                      items=items)
 
-    @cached(CacheStrategy.PLAYLIST_METADATA)
-    def featured_playlists(self, limit: int = 20, offset: int = 0, country: Optional[str] = None,
-                          locale: Optional[str] = None, timestamp: Optional[str] = None):
-        """Get featured playlists. Cached for 5 minutes."""
-        kwargs = {"limit": limit, "offset": offset}
-        if country:
-            kwargs["country"] = country
-        if locale:
-            kwargs["locale"] = locale
-        if timestamp:
-            kwargs["timestamp"] = timestamp
-        return self._handle_api_call(self.sp.featured_playlists, **kwargs)
-
-    @cached(CacheStrategy.CATEGORIES)
-    def category_playlists(self, category_id: str, limit: int = 20, offset: int = 0,
-                          country: Optional[str] = None):
-        """Get category's playlists. Cached for 1 hour."""
-        kwargs = {"category_id": category_id, "limit": limit, "offset": offset}
-        if country:
-            kwargs["country"] = country
-        return self._handle_api_call(self.sp.category_playlists, **kwargs)
-
     def playlist_cover_image(self, playlist_id: str):
         """Get playlist cover image."""
         return self._handle_api_call(self.sp.playlist_cover_image, playlist_id=playlist_id)
@@ -332,7 +301,7 @@ class SpotifyClient:
 
     def add_to_queue(self, uri: str, device_id: Optional[str] = None):
         """Add track to queue."""
-        return self._handle_api_call(self.sp.add_to_queue, uri=uri, device_id=device_id)
+        return self._handle_api_call(self.sp.add_to_queue, uri, device_id=device_id)
 
     # User methods (cached for 1-6 hours)
     @cached(CacheStrategy.USER_PROFILE)
@@ -360,10 +329,7 @@ class SpotifyClient:
     @cached(CacheStrategy.FOLLOWED_ARTISTS)
     def current_user_following_artists(self, limit: int = 20, after: Optional[str] = None):
         """Get artists followed by current user. Cached for 1 hour."""
-        kwargs = {"type": "artist", "limit": limit}
-        if after:
-            kwargs["after"] = after
-        return self._handle_api_call(self.sp.current_user_followed_artists, **kwargs)
+        return self._handle_api_call(self.sp.current_user_followed_artists, limit=limit, after=after)
 
     def user_follow_artists(self, ids: List[str]):
         """Follow artists or users."""
@@ -383,7 +349,7 @@ class SpotifyClient:
 
     def current_user_following_contains(self, ids: List[str], follow_type: str = "artist"):
         """Check if current user follows artists or users."""
-        return self._handle_api_call(self.sp.current_user_following, type=follow_type, ids=ids)
+        return self._handle_api_call(self.sp.current_user_following_artists if follow_type == "artist" else self.sp.current_user_following_users, ids)
 
     def playlist_is_following(self, playlist_id: str, user_ids: List[str]):
         """Check if users follow a playlist."""
@@ -422,45 +388,6 @@ class SpotifyClient:
         """Get artist's top tracks. Cached for 24 hours."""
         return self._handle_api_call(self.sp.artist_top_tracks, artist_id=artist_id, country=country)
 
-    @cached(CacheStrategy.ARTIST_METADATA)
-    def artist_related_artists(self, artist_id: str):
-        """Get related artists. Cached for 24 hours."""
-        return self._handle_api_call(self.sp.artist_related_artists, artist_id=artist_id)
-
-    # Audiobook methods (cached for 24 hours)
-    @cached(CacheStrategy.AUDIOBOOK_METADATA)
-    def audiobook(self, audiobook_id: str, market: str = "US"):
-        """Get audiobook information. Cached for 24 hours."""
-        return self._handle_api_call(self.sp.get_audiobook, id=audiobook_id, market=market)
-
-    @cached(CacheStrategy.AUDIOBOOK_METADATA)
-    def audiobooks(self, audiobook_ids: List[str], market: str = "US"):
-        """Get multiple audiobooks. Cached for 24 hours."""
-        return self._handle_api_call(self.sp.get_audiobooks, ids=audiobook_ids, market=market)
-
-    @cached(CacheStrategy.AUDIOBOOK_METADATA)
-    def audiobook_chapters(self, audiobook_id: str, limit: int = 20, offset: int = 0, market: str = "US"):
-        """Get audiobook chapters. Cached for 24 hours."""
-        return self._handle_api_call(self.sp.get_audiobook_chapters,
-                                     id=audiobook_id, limit=limit, offset=offset, market=market)
-
-    @cached(CacheStrategy.USER_LIBRARY)
-    def current_user_saved_audiobooks(self, limit: int = 20, offset: int = 0):
-        """Get user's saved audiobooks. Cached for 3 minutes."""
-        return self._handle_api_call(self.sp.get_users_saved_audiobooks, limit=limit, offset=offset)
-
-    def current_user_saved_audiobooks_add(self, audiobook_ids: List[str]):
-        """Save audiobooks to library."""
-        return self._handle_api_call(self.sp.save_audiobooks, ids=audiobook_ids)
-
-    def current_user_saved_audiobooks_delete(self, audiobook_ids: List[str]):
-        """Remove audiobooks from library."""
-        return self._handle_api_call(self.sp.remove_users_saved_audiobooks, ids=audiobook_ids)
-
-    def current_user_saved_audiobooks_contains(self, audiobook_ids: List[str]):
-        """Check if audiobooks are in library."""
-        return self._handle_api_call(self.sp.check_users_audiobooks, ids=audiobook_ids)
-
     # Category methods (cached for 1 hour)
     @cached(CacheStrategy.CATEGORIES)
     def categories(self, country: Optional[str] = None, locale: Optional[str] = None,
@@ -483,37 +410,16 @@ class SpotifyClient:
             kwargs["locale"] = locale
         return self._handle_api_call(self.sp.category, **kwargs)
 
-    # Chapter methods (cached for 24 hours)
-    def chapter(self, chapter_id: str, market: Optional[str] = None):
-        """Get chapter information."""
-        kwargs = {"id": chapter_id}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.get_chapter, **kwargs)
-
-    def chapters(self, chapter_ids: List[str], market: Optional[str] = None):
-        """Get multiple chapters."""
-        kwargs = {"ids": chapter_ids}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.get_chapters, **kwargs)
-
     # Episode methods (cached for 24 hours)
     @cached(CacheStrategy.EPISODE_METADATA)
     def episode(self, episode_id: str, market: Optional[str] = None):
         """Get episode information. Cached for 24 hours."""
-        kwargs = {"id": episode_id}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.episode, **kwargs)
+        return self._handle_api_call(self.sp.episode, episode_id, market=market)
 
     @cached(CacheStrategy.EPISODE_METADATA)
     def episodes(self, episode_ids: List[str], market: Optional[str] = None):
         """Get multiple episodes. Cached for 24 hours."""
-        kwargs = {"ids": episode_ids}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.episodes, **kwargs)
+        return self._handle_api_call(self.sp.episodes, episode_ids, market=market)
 
     @cached(CacheStrategy.USER_LIBRARY)
     def current_user_saved_episodes(self, limit: int = 20, offset: int = 0, market: Optional[str] = None):
@@ -539,26 +445,17 @@ class SpotifyClient:
     @cached(CacheStrategy.SHOW_METADATA)
     def show(self, show_id: str, market: Optional[str] = None):
         """Get a show by ID. Cached for 24 hours."""
-        kwargs = {"id": show_id}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.show, **kwargs)
+        return self._handle_api_call(self.sp.show, show_id, market=market)
 
     @cached(CacheStrategy.SHOW_METADATA)
     def shows(self, show_ids: List[str], market: Optional[str] = None):
         """Get multiple shows by IDs. Cached for 24 hours."""
-        kwargs = {"ids": show_ids}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.shows, **kwargs)
+        return self._handle_api_call(self.sp.shows, show_ids, market=market)
 
     @cached(CacheStrategy.SHOW_METADATA)
     def show_episodes(self, show_id: str, limit: int = 20, offset: int = 0, market: Optional[str] = None):
         """Get episodes from a show. Cached for 24 hours."""
-        kwargs = {"id": show_id, "limit": limit, "offset": offset}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.show_episodes, **kwargs)
+        return self._handle_api_call(self.sp.show_episodes, show_id, limit=limit, offset=offset, market=market)
 
     @cached(CacheStrategy.USER_LIBRARY)
     def current_user_saved_shows(self, limit: int = 20, offset: int = 0):
@@ -567,48 +464,26 @@ class SpotifyClient:
 
     def current_user_saved_shows_add(self, show_ids: List[str]):
         """Save shows to library."""
-        return self._handle_api_call(self.sp.current_user_saved_shows_add, ids=show_ids)
+        return self._handle_api_call(self.sp.current_user_saved_shows_add, shows=show_ids)
 
     def current_user_saved_shows_delete(self, show_ids: List[str]):
         """Remove shows from library."""
-        return self._handle_api_call(self.sp.current_user_saved_shows_delete, ids=show_ids)
+        return self._handle_api_call(self.sp.current_user_saved_shows_delete, shows=show_ids)
 
     def current_user_saved_shows_contains(self, show_ids: List[str]):
         """Check if shows are in library."""
-        return self._handle_api_call(self.sp.current_user_saved_shows_contains, ids=show_ids)
+        return self._handle_api_call(self.sp.current_user_saved_shows_contains, show_ids)
 
     # Track methods (cached for 24 hours)
     @cached(CacheStrategy.TRACK_METADATA)
     def track(self, track_id: str, market: Optional[str] = None):
         """Get a track by ID. Cached for 24 hours."""
-        kwargs = {"id": track_id}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.track, **kwargs)
+        return self._handle_api_call(self.sp.track, track_id, market=market)
 
     @cached(CacheStrategy.TRACK_METADATA)
     def tracks(self, track_ids: List[str], market: Optional[str] = None):
         """Get multiple tracks by IDs. Cached for 24 hours."""
-        kwargs = {"ids": track_ids}
-        if market:
-            kwargs["market"] = market
-        return self._handle_api_call(self.sp.tracks, **kwargs)
-
-    @cached(CacheStrategy.AUDIO_FEATURES)
-    def audio_features(self, track_ids: List[str]):
-        """Get audio features for multiple tracks. Cached for 1 week."""
-        return self._handle_api_call(self.sp.audio_features, tracks=track_ids)
-
-    @cached(CacheStrategy.AUDIO_FEATURES)
-    def audio_analysis(self, track_id: str):
-        """Get audio analysis for a track. Cached for 1 week."""
-        return self._handle_api_call(self.sp.audio_analysis, track_id)
-
-    # Genre methods (cached for 24 hours)
-    @cached(CacheStrategy.GENRES)
-    def recommendation_genre_seeds(self):
-        """Get available genre seeds for recommendations. Cached for 24 hours."""
-        return self._handle_api_call(self.sp.recommendation_genre_seeds)
+        return self._handle_api_call(self.sp.tracks, track_ids, market=market)
 
     # Market methods (cached for 24 hours)
     @cached(CacheStrategy.MARKETS)
