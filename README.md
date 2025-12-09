@@ -10,7 +10,7 @@
   
   **Control Spotify with natural language through Claude Desktop.**
   
-  *75 tools • 8 resources • 8 prompts*
+  *75 tools • 10 resources*
 </div>
 
 ---
@@ -62,7 +62,9 @@ Just talk naturally:
 | Tracks | 2 | Track details |
 | Search | 1 | Universal search |
 | Markets | 1 | Available markets |
-| **Composite** | 6 | Multi-step operations |
+| **Composite** | 6 | Multi-step operations (create playlists, analyze listening) |
+
+**Note:** Audiobooks, Chapters, and Genre Seeds are deprecated by Spotify's API changes.
 
 📖 **Full Tool Reference:** [docs/TOOLS.md](docs/TOOLS.md)
 
@@ -88,7 +90,7 @@ Just talk naturally:
   "mcpServers": {
     "spotify": {
       "command": "python",
-      "args": ["-m", "spotify_mcp.server"],
+      "args": ["-m", "spotify_mcp.spotify_server"],
       "env": {
         "SPOTIFY_CLIENT_ID": "your_client_id",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret",
@@ -124,6 +126,7 @@ Just talk naturally:
 | [Tool Reference](docs/TOOLS.md) | All 75 tools explained |
 | [API Reference](docs/API.md) | Resources, prompts, schemas |
 | [Deployment](docs/DEPLOYMENT.md) | Production deployment guide |
+| [Migration Status](docs/MIGRATION_STATUS_V3.md) | FastMCP v3.0 implementation |
 | [Architecture](docs/architecture/OVERVIEW.md) | System design |
 
 ---

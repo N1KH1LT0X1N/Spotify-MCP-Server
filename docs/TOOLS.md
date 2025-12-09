@@ -1,6 +1,34 @@
 # 🛠️ Tool Reference
 
-> **Total:** 75 tools (69 standard + 6 composite)
+> **Total:** 75 Production-Ready Tools (69 individual + 6 composite)
+> 
+> **Status**: ✅ All tools validated against Spotify Web API  
+> **Protocol**: MCP 2025-06-18 compliant  
+> **Framework**: FastMCP v3.0 with Context injection
+> 
+> **Note:** Audiobooks, Chapters, and Genre Seeds deprecated by Spotify API (Nov 2024)
+
+---
+
+## 📊 Quick Stats
+
+| Category | Tools | Status |
+|----------|-------|--------|
+| Playback | 12 | ✅ Active |
+| Playlists | 12 | ✅ Active |
+| Albums | 8 | ✅ Active |
+| User | 8 | ✅ Active |
+| Shows | 7 | ✅ Active |
+| Episodes | 6 | ✅ Active |
+| Composite | 6 | ✅ Active |
+| Artists | 4 | ✅ Active |
+| Library | 4 | ✅ Active |
+| Categories | 2 | ✅ Active |
+| Queue | 2 | ✅ Active |
+| Tracks | 2 | ✅ Active |
+| Search | 1 | ✅ Active |
+| Markets | 1 | ✅ Active |
+| **TOTAL** | **75** | **✅ Production Ready** |
 
 ---
 

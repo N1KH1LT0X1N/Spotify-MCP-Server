@@ -52,6 +52,7 @@ def test_tool_registration():
         from spotify_mcp.tools.audiobooks import AUDIOBOOK_TOOLS
         from spotify_mcp.tools.categories import CATEGORY_TOOLS
         from spotify_mcp.tools.chapters import CHAPTER_TOOLS
+        from spotify_mcp.tools.composite_definitions import COMPOSITE_TOOL_DEFINITIONS
         from spotify_mcp.tools.episodes import EPISODE_TOOLS
         from spotify_mcp.tools.genres import GENRE_TOOLS
         from spotify_mcp.tools.library import LIBRARY_TOOLS
@@ -69,7 +70,8 @@ def test_tool_registration():
             CATEGORY_TOOLS + CHAPTER_TOOLS + EPISODE_TOOLS +
             GENRE_TOOLS + LIBRARY_TOOLS + MARKET_TOOLS +
             PLAYBACK_TOOLS + PLAYLIST_TOOLS + QUEUE_TOOLS +
-            SEARCH_TOOLS + SHOW_TOOLS + TRACK_TOOLS + USER_TOOLS
+            SEARCH_TOOLS + SHOW_TOOLS + TRACK_TOOLS + USER_TOOLS +
+            COMPOSITE_TOOL_DEFINITIONS
         )
         
         print(f"📊 Total tools defined: {len(all_tools)}")
@@ -111,11 +113,11 @@ def test_tool_registration():
         if extra:
             print(f"\n⚠️  Functions registered but no tool definition: {extra}")
         
-        if len(all_tools) == 86 and len(TOOL_FUNCTIONS) == 86:
-            print("\n✅ All 86 tools correctly registered!")
+        if len(all_tools) == 75 and len(TOOL_FUNCTIONS) == 75:
+            print("\n✅ All 75 tools correctly registered!")
             return True
         else:
-            print(f"\n❌ Tool count mismatch!")
+            print(f"\n❌ Tool count mismatch! Expected 75, got {len(TOOL_FUNCTIONS)}")
             return False
             
     except Exception as e:
@@ -182,7 +184,7 @@ def test_tool_schemas():
                 print(f"   - {issue}")
             return False
         else:
-            print("✅ All 86 tool schemas are valid!")
+            print("✅ All 75 tool schemas are valid!")
             return True
             
     except Exception as e:

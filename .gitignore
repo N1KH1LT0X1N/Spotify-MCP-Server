@@ -50,15 +50,33 @@ Thumbs.db
 
 # Cache and local data
 .cache
+.cache-*
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
 *.cover
 .hypothesis/
 
-# Security audit logs (optional - comment out if you want to track these)
+# Test artifacts and results
+*_test_results.json
+*_REPORT.md
+test_output/
+
+# Security audit logs
 .auth_audit.json
+*.audit.json
 
 # Backup files
 *.bak
 *~
+
+# Generated images and media
+*.webp
+*.png
+*.jpg
+*.jpeg
+!icon.svg
+
+PUSH_INSTRUCTIONS.md
+QUICK_PUSH.md

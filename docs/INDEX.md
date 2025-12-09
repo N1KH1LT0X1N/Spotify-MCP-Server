@@ -1,6 +1,6 @@
 # 📚 Spotify MCP Server Documentation
 
-> **Current Version:** 2.0.0 | **Tools:** 75 (69 standard + 6 composite)
+> **Current Version:** 2.0.0 | **Tools:** 75 (69 standard + 6 composite) | **Status:** Production Ready
 
 ---
 
@@ -14,23 +14,35 @@
 
 ---
 
-## 📖 Reference
+## 📖 Core Reference
 
 | Document | Description |
 |----------|-------------|
-| [Tool Reference](TOOLS.md) | Complete list of all 75 tools |
-| [Architecture](architecture/OVERVIEW.md) | System design and decisions |
-| [API Reference](API.md) | Resources, prompts, and schemas |
+| [Tool Reference](TOOLS.md) | Complete list of all 75 tools with examples |
+| [API Reference](API.md) | Resources, prompts, schemas, and authentication |
+| [Architecture](architecture/OVERVIEW.md) | System design and technical decisions |
+| [Repository Structure](REPOSITORY_STRUCTURE.md) | File organization and navigation guide |
 
 ---
 
-## 🔧 Advanced
+## 🔧 Advanced Topics
 
 | Document | Description |
 |----------|-------------|
-| [Enterprise Features](enterprise/quickstart.md) | Metrics, logging, CLI |
-| [Diagnostics](diagnostics/tools-comparison.md) | Diagnostic tools comparison |
-| [Deployment](DEPLOYMENT.md) | Production deployment guide |
+| [Deployment Guide](DEPLOYMENT.md) | Production deployment (Docker, K8s, local) |
+| [Migration Status](MIGRATION_STATUS_V3.md) | FastMCP v3.0 implementation details |
+| [Validation Report](VALIDATION_REPORT.md) | Comprehensive quality audit (99/100) |
+| [Cleanup Summary](CLEANUP_SUMMARY.md) | Repository cleanup and organization |
+| [Enterprise Features](enterprise/README.md) | Metrics, logging, and CLI tools |
+| [Diagnostics](diagnostics/tools-comparison.md) | Diagnostic tools and comparisons |
+
+---
+
+## 🚀 Roadmap
+
+| Document | Description |
+|----------|-------------|
+| [**v3.0.0 Improvements**](IMPROVEMENTS.md) | FastMCP migration plan |
 
 ---
 

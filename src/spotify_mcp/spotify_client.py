@@ -399,6 +399,11 @@ class SpotifyClient:
         """Get artist's top tracks. Cached for 24 hours."""
         return self._handle_api_call(self.sp.artist_top_tracks, artist_id=artist_id, country=country)
 
+    @cached(CacheStrategy.ARTIST_METADATA)
+    def artist_related_artists(self, artist_id: str):
+        """Get related artists. Cached for 24 hours."""
+        return self._handle_api_call(self.sp.artist_related_artists, artist_id=artist_id)
+
     # Category methods (cached for 1 hour)
     @cached(CacheStrategy.CATEGORIES)
     def categories(self, country: Optional[str] = None, locale: Optional[str] = None,
@@ -420,6 +425,15 @@ class SpotifyClient:
         if locale:
             kwargs["locale"] = locale
         return self._handle_api_call(self.sp.category, **kwargs)
+
+    @cached(CacheStrategy.CATEGORIES)
+    def category_playlists(self, category_id: str, country: Optional[str] = None,
+                           limit: int = 20, offset: int = 0):
+        """Get playlists for a category. Cached for 1 hour."""
+        kwargs = {"category_id": category_id, "limit": limit, "offset": offset}
+        if country:
+            kwargs["country"] = country
+        return self._handle_api_call(self.sp.category_playlists, **kwargs)
 
     # Episode methods (cached for 24 hours)
     @cached(CacheStrategy.EPISODE_METADATA)

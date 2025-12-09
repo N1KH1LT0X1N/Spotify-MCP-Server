@@ -1,0 +1,39 @@
+# Clean Repository Guide
+# Files and directories to keep clean (not commit to git)
+
+# Runtime cache
+.cache*
+.pytest_cache/
+__pycache__/
+
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+*.cover
+
+# Test artifacts
+*_test_results.json
+*_REPORT.md
+test_output/
+
+# Security/audit logs
+.auth_audit.json
+*.audit.json
+
+# Generated media
+*.webp
+!icon.svg
+
+# IDE workspace
+.vscode/settings.json
+.idea/workspace.xml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/

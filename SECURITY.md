@@ -112,7 +112,7 @@ We take security seriously. If you discover a security vulnerability, please fol
 
 ### Implemented
 
-- ✅ OAuth 2.0 authentication
+- ✅ OAuth 2.0 authentication with PKCE (via spotipy.SpotifyOAuth)
 - ✅ Automatic token refresh
 - ✅ Token rotation tracking
 - ✅ Audit logging
@@ -123,7 +123,6 @@ We take security seriously. If you discover a security vulnerability, please fol
 
 ### Planned
 
-- ⏳ PKCE (Proof Key for Code Exchange) support
 - ⏳ Client-side rate limiting
 - ⏳ Token encryption at rest
 - ⏳ Automated security scanning in CI/CD

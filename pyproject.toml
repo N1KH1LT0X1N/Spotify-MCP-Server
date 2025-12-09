@@ -5,7 +5,7 @@ build-backend = "setuptools.build_backend"
 [project]
 name = "spotify-mcp"
 version = "2.0.0"
-description = "🎵 Complete Spotify control through AI - 75 tools, 8 resources, 8 prompts"
+description = "🎵 Production-ready Spotify MCP Server - 75 tools, 10 resources, FastMCP v3.0"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [

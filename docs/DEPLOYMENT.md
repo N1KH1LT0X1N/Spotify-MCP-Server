@@ -7,17 +7,31 @@
 Run directly on your machine with Claude Desktop.
 
 ```bash
-# Install
+# 1. Install in development mode
 pip install -e .
 
-# Authenticate
+# 2. One-time authentication (opens browser)
 python -m spotify_mcp.auth
 
-# Add to Claude Desktop config and restart
+# 3. Verify server starts (optional)
+python -m spotify_mcp.spotify_server
+# Press Ctrl+C to stop after seeing "✓ Spotify MCP Server v3.0 Enhanced initialized"
+
+# 4. Add to Claude Desktop config (see below)
+# 5. Restart Claude Desktop
+
+# Alternative: Use installed command
+spotify-mcp
 ```
 
-**Pros:** Simple, no infrastructure needed  
-**Cons:** Only works on your machine
+**Pros:** Simple setup, no infrastructure needed, automatic token refresh  
+**Cons:** Only works on your machine, requires Claude Desktop restart after config changes
+
+**System Requirements:**
+- Python 3.10+
+- 50MB disk space
+- Internet connection for Spotify API
+- Spotify Premium (for playback control)
 
 ---
 

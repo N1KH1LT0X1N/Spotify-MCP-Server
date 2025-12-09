@@ -1,6 +1,6 @@
 # 📡 API Reference
 
-## MCP Resources (8)
+## MCP Resources (10)
 
 Resources provide real-time data access via `spotify://` URIs.
 
@@ -14,23 +14,61 @@ Resources provide real-time data access via `spotify://` URIs.
 | `spotify://devices` | Available Spotify Connect devices |
 | `spotify://user/profile` | Current user's profile |
 | `spotify://user/top-tracks` | User's top tracks (medium term) |
+| `spotify://user/top-artists` | User's top artists |
+| `spotify://search/results` | Recent search results |
 
 ---
 
-## MCP Prompts (8)
+## Architecture
 
-Pre-built conversation templates for common workflows.
+### Server Entry Points
 
-| Prompt | Description | Arguments |
-|--------|-------------|-----------|
-| `discover_new_music` | Find new music based on preferences | `mood` (optional) |
-| `create_playlist` | Create custom themed playlist | `theme` (optional) |
-| `whats_playing` | Get current playback info | - |
-| `control_playback` | Control playback with commands | `action` (optional) |
-| `manage_library` | Organize music library | `task` (optional) |
-| `find_similar` | Find similar music | `reference` (required) |
-| `analyze_listening_habits` | Analyze listening patterns | `timeframe` (optional) |
-| `explore_artist` | Deep dive into artist | `artist_name` (required) |
+The server can be started in multiple ways:
+
+```bash
+# Direct module execution (recommended)
+python -m spotify_mcp.spotify_server
+
+# Using installed command (after pip install -e .)
+spotify-mcp
+
+# Compatibility shim for legacy tests
+python -m spotify_mcp.server
+```
+
+### Architecture Overview
+
+```
+spotify_server.py (3,215 lines)
+├── FastMCP v3.0 server instance
+├── 75 @mcp.tool() decorated async functions
+├── 10 @mcp.resource() handlers
+├── AppContext with SpotifyClient
+└── app_lifespan() for startup/shutdown
+
+server.py (157 lines)
+├── Compatibility shim for tests
+├── TOOL_FUNCTIONS dict (75 tools)
+└── Re-exports main() and mcp
+
+tools/ (16 modules)
+├── playback.py (12 tools)
+├── playlists.py (12 tools)
+├── albums.py (8 tools)
+├── user.py (8 tools)
+├── shows.py (7 tools)
+├── episodes.py (6 tools)
+├── composite.py (6 tools)
+└── ... (7 more modules)
+```
+
+### Tool Organization
+
+- **Individual tools (69)**: Sync implementations in `src/spotify_mcp/tools/` modules
+- **Composite tools (6)**: Multi-step operations in `tools/composite.py`
+- **FastMCP wrappers**: Async `@mcp.tool()` decorators in `spotify_server.py`
+- **Compatibility layer**: `TOOL_FUNCTIONS` dict in `server.py` for legacy tests
+- **Context injection**: FastMCP Context provides SpotifyClient access
 
 ---
 
